@@ -103,3 +103,39 @@ App
             |-----Repositories
             |-----Services
 ```
+
+# Architecture Frontend
+
+```bash
+Js
+
+    |----components  ->  Les composants généraux
+    |----hooks  ->  Les hooks généraux
+    |----types  ->  Les types généraux
+    |----layouts  -> Les layouts généraux
+    |----Modules
+        |---Dashboard
+            |-----components
+            |-----contexts
+            |-----hooks
+            |-----api
+            |-----utils
+            |-----types
+            |-----pages
+        |---Dopamine_Tracker
+            |-----components
+            |-----contexts
+            |-----hooks
+            |-----api
+            |-----utils
+            |-----types
+            |-----pages
+        |---Flow_Engine
+            |-----components
+            |-----contexts
+            |-----hooks
+            |-----api
+            |-----utils
+            |-----types
+            |-----pages
+```
