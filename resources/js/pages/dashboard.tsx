@@ -1,27 +1,33 @@
 import { Head } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+
 import { dashboard } from '@/routes';
+import ScoreGlobalSection from '@/modules/dashboard/components/ScoreGlobalSection';
+import GraphicSection from '@/modules/dashboard/components/GraphicSection';
+import RecommandationSection from '@/modules/dashboard/components/RecommandationSection';
+import DernierStimulus from '@/modules/dashboard/components/DernierStimulus';
 
 export default function Dashboard() {
     return (
         <>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
+
+            <h1 className='font-bold text-2xl mb-4'>Bonjour Allassane - Voici ton état neurochimique</h1>
+
+            <div className='flex items-center gap-2 mb-4'>
+                <span className='size-2 bg-destructive rounded-full' /> <p className='text-destructive text-sm'>Etat : Attention requise</p>
             </div>
+
+            {/* Les Scores des 4 neurotrasmetteurs */}
+            <ScoreGlobalSection />
+
+            {/* Affichage des graphiques */}
+            <GraphicSection />
+
+            {/* Recommandation */}
+            <RecommandationSection />
+
+            {/* Les derniers stimulus */}
+            <DernierStimulus />
         </>
     );
 }
