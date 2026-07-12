@@ -10,6 +10,15 @@ export default function AppLayout({
 }) {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
+            <div className="flex items-center justify-between rounded-lg bg-emerald-800 px-4 py-2.5 text-sm text-white">
+                <span>Reset 7 jours en cours — Jour 3/7</span>
+                <a
+                    href="#"
+                    className="font-medium underline underline-offset-2"
+                >
+                    Protocol Details
+                </a>
+            </div>
             {children}
         </AppLayoutTemplate>
     );

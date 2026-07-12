@@ -65,7 +65,7 @@
     --background: #F8F7F4;
     --foreground: #1C1B19;
 
-    --card: #EEEDFE;
+    --card: #FFFFFF;
     --card-foreground: #1C1B19;
 
     --popover: #F8F7F4;
@@ -150,5 +150,11 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    Button {
+        @apply cursor-pointer;
     }
 }
