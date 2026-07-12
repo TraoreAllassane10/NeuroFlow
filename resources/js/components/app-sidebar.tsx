@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { BarChart2, BookOpen, Brain, Flower2, FolderGit2, HelpCircle, LayoutGrid, RotateCcw, Settings, Share2, TrendingUp, Waves } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
+import { ScoreUser } from './score-user';
 
 const mainNavItems: NavItem[] = [
     {
@@ -22,25 +23,60 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Dopamine Tracker',
+        href: '#',
+        icon: TrendingUp,
+    },
+    {
+        title: 'Flow Engine',
+        href: '#',
+        icon: Waves,
+    },
+    {
+        title: 'Detox & Reset',
+        href: '#',
+        icon: RotateCcw,
+    },
+    {
+        title: 'Neuro Coach',
+        href: '#',
+        icon: Brain,
+    },
+    {
+        title: 'Stress & Cortisol',
+        href: '#',
+        icon: Flower2,
+    },
+    {
+        title: 'Connexion',
+        href: '#',
+        icon: Share2,
+    },
+    {
+        title: 'Analytics',
+        href: '#',
+        icon: BarChart2,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
+        title: 'Settings',
+        href: '#',
+        icon: Settings,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Support',
+        href: '#',
+        icon: HelpCircle,
     },
 ];
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="inset" className='border-r border-sidebar-border/60'>
+            <SidebarHeader className='gap-3'>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -50,6 +86,8 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
+
+                <ScoreUser />
             </SidebarHeader>
 
             <SidebarContent>
