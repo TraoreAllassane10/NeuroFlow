@@ -25,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Dopamine Tracker',
-        href: '#',
+        href: '/dopamine-tracker',
         icon: TrendingUp,
     },
     {

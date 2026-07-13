@@ -9,7 +9,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
     Route::get('/dopamine-tracker', function () {
-        return Inertia::render('../modules/dopamineTracker/pages/Index');
+        return Inertia::render('dopamineTracker/Index');
     });
 });
 
