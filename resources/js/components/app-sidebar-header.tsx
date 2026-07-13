@@ -6,8 +6,10 @@ import { Bell, CheckCircle2, Moon } from 'lucide-react';
 
 export function AppSidebarHeader({
     breadcrumbs = [],
+    openDialog
 }: {
     breadcrumbs?: BreadcrumbItemType[];
+    openDialog: any
 }) {
     return (
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-sidebar-border/50 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
@@ -17,7 +19,7 @@ export function AppSidebarHeader({
             </div>
 
             <div className="flex items-center justify-end gap-3">
-                <Button className="gap-2 bg-primary hover:bg-primary/90">
+                <Button onClick={() => openDialog(true)} className="gap-2 bg-primary hover:bg-primary/90">
                     <CheckCircle2 className="size-4" />
                     Check-in du jour
                 </Button>
