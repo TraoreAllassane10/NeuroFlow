@@ -31,8 +31,8 @@ export default function Index() {
     }
 
     return (
-        <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-            {/* Formulaire de saisie du déclencheur */}
+        <>
+             {/* Formulaire de saisie du déclencheur */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
                     <h1 className="mb-4 text-lg font-bold text-foreground">
@@ -118,7 +118,7 @@ export default function Index() {
                 </CardContent>
             </Card>
 
-            {/* Timeline / Analytique */}
+            {/*  Timeline / Analytique */}
             <Tabs defaultValue="timeline">
                 <TabsList className="h-auto justify-start gap-6 rounded-none border-b border-border bg-transparent p-0">
                     <TabsTrigger
@@ -188,6 +188,6 @@ export default function Index() {
                     </Card>
                 </TabsContent>
             </Tabs>
-        </div>
+        </>
     );
 }

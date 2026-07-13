@@ -11,7 +11,7 @@ export default function AppLayout({
 }) {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
-            <ProtocolBanner title="Reset 7 jours en cours — Jour 3/7" />
+            <ProtocolBanner title="Reset 7 jours en cours — Jour 3/7" className='my-4' />
 
             {children}
         </AppLayoutTemplate>

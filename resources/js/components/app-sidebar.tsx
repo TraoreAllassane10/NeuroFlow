@@ -30,7 +30,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Flow Engine',
-        href: '#',
+        href: '/flow-engine',
         icon: Waves,
     },
     {
