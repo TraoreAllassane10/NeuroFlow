@@ -17,6 +17,7 @@ import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
 import { usePage } from '@inertiajs/react';
 import { Stimulus } from '../types';
+import DopamineBarChart from '../components/dopamine-bar-chart';
 
 type Speed = 'rapide' | 'lente';
 
@@ -276,7 +277,7 @@ export default function Index() {
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">
-                            Vue analytique à venir.
+                            <DopamineBarChart />
                         </CardContent>
                     </Card>
                 </TabsContent>

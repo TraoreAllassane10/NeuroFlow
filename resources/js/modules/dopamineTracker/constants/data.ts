@@ -4,14 +4,13 @@ import {
     Clapperboard,
     Gamepad2,
     GraduationCap,
-    Minimize2,
     MoreHorizontal,
     ShoppingCart,
     Smartphone,
     Swords,
     UtensilsCrossed,
 } from 'lucide-react';
-import { Category } from '../types';
+import { Category, WeeklyDopamine } from '../types';
 
 export const categories: Category[] = [
     { key: 'sommeil', label: 'Sommeil', icon: BedDouble },
@@ -28,3 +27,13 @@ export const categories: Category[] = [
 
 // Les heures affichées sur le timeline
 export const hourMarks = [0, 4, 8, 12, 16, 20, 24];
+
+export const dataChart: WeeklyDopamine[] = [
+    { day: "Lun", rapide: 6, lente: 2 },
+    { day: "Mar", rapide: 3, lente: 5 },
+    { day: "Mer", rapide: 7, lente: 1 },
+    { day: "Jeu", rapide: 2, lente: 6 },
+    { day: "Ven", rapide: 5, lente: 4 },
+    { day: "Sam", rapide: 4, lente: 5 },
+    { day: "Dim", rapide: 1, lente: 8 },
+];
