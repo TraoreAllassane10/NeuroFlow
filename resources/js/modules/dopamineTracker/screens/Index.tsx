@@ -10,8 +10,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { dashboard } from '@/routes';
-import type { BreadcrumbItem } from '@/types';
 import { CategoryPicker } from '../components/category-picker';
 import { useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
