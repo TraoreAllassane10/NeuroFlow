@@ -1,4 +1,10 @@
-import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import {
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    SproutIcon,
+    Zap,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,12 +16,6 @@ import { CategoryPicker } from '../components/category-picker';
 import { useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dopamine Tracker',
-        href: dashboard().url,
-    },
-];
 
 type Speed = 'rapide' | 'lente';
 
@@ -32,7 +32,7 @@ export default function Index() {
 
     return (
         <>
-             {/* Formulaire de saisie du déclencheur */}
+            {/* Formulaire de saisie du déclencheur */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
                     <h1 className="mb-4 text-lg font-bold text-foreground">
@@ -51,24 +51,24 @@ export default function Index() {
                             <button
                                 type="button"
                                 onClick={() => setSpeed('rapide')}
-                                className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                                className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                                     speed === 'rapide'
                                         ? 'bg-red-100 text-red-700'
                                         : 'text-muted-foreground hover:bg-muted'
                                 }`}
                             >
-                                Rapide ⚡
+                                Rapide <Zap size={18} />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setSpeed('lente')}
-                                className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                                className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                                     speed === 'lente'
                                         ? 'bg-emerald-100 text-emerald-700'
                                         : 'text-muted-foreground hover:bg-muted'
                                 }`}
                             >
-                                Lente 🌱
+                                Lente <SproutIcon size={18} />
                             </button>
                         </div>
                     </div>
