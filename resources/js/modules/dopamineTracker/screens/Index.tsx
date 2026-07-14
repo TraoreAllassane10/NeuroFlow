@@ -47,7 +47,7 @@ export default function Index() {
             setIntensity(5);
             setTime(currentTime);
 
-            toast.success(response.message || "Stimulus crée avec succès");
+            toast.success(response.message || 'Stimulus crée avec succès');
         }
     }
 
@@ -160,6 +160,7 @@ export default function Index() {
                     <Card className="border-border/60">
                         <CardContent className="py-6">
                             <div className="mb-4 flex items-center justify-between">
+                                {/* Date */}
                                 <div className="flex items-center gap-3">
                                     <button
                                         type="button"
@@ -184,6 +185,7 @@ export default function Index() {
                                     </button>
                                 </div>
 
+                                {/* Legende */}
                                 <div className="flex items-center gap-4 text-sm">
                                     <span className="flex items-center gap-1.5 text-muted-foreground">
                                         <span className="size-2 rounded-full border-2 border-red-400" />

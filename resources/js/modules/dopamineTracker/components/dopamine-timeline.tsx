@@ -1,21 +1,9 @@
-import { Gamepad2, Minimize2, Smartphone, type LucideIcon } from 'lucide-react';
-import { TimelineEvent } from '../types';
-
-
-// À remplacer par les vrais logs du jour sélectionné (props Inertia),
-// avec `type: 'fast' | 'slow' | 'cluster'` selon la donnée réelle.
-const events: TimelineEvent[] = [
-    { hour: 4, type: 'fast', icon: Gamepad2, label: 'Jeu vidéo' },
-    { hour: 12, type: 'cluster', icon: Minimize2, label: 'Plusieurs activités' },
-    { hour: 20, type: 'fast', icon: Smartphone, label: 'Téléphone' },
-];
-
-const hourMarks = [0, 4, 8, 12, 16, 20, 24];
+import { events, hourMarks } from '../constants/data';
 
 export function DopamineTimeline() {
     return (
         <div>
-            <div className="relative h-40 w-full overflow-hidden rounded-lg bg-linear-to-b from-indigo-50 to-white">
+            <div className="relative h-40 w-full overflow-hidden rounded-lg bg-linear-to-b from-primary/25 to-white">
                 {events.map((event) => {
                     const left = `${(event.hour / 24) * 100}%`;
 
