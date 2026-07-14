@@ -6,13 +6,6 @@ export interface Category {
     icon: LucideIcon;
 }
 
-export interface TimelineEvent {
-    hour: number;
-    type: 'fast' | 'cluster';
-    icon: LucideIcon;
-    label: string;
-}
-
 export interface Stimulus {
     id: number;
     categorie: string;

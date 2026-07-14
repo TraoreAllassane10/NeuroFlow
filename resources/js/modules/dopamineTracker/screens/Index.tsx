@@ -15,7 +15,6 @@ import { useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
-import { DopamineTrackerProvider } from '../contexts/DopamineTrackerContext';
 import { usePage } from '@inertiajs/react';
 import { Stimulus } from '../types';
 
@@ -79,8 +78,9 @@ export default function Index() {
     }
 
     return (
-        <DopamineTrackerProvider>
-            {/* Formulaire de saisie du déclencheur */}
+   
+         <>
+             {/* Formulaire de saisie du déclencheur  */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
                     <h1 className="mb-4 text-lg font-bold text-foreground">
@@ -166,7 +166,7 @@ export default function Index() {
                 </CardContent>
             </Card>
 
-            {/*  Timeline / Analytique */}
+               {/* Timeline / Analytique  */}
             <Tabs defaultValue="timeline">
                 <TabsList className="h-auto justify-start gap-6 rounded-none border-b border-border bg-transparent p-0">
                     <TabsTrigger
@@ -183,7 +183,7 @@ export default function Index() {
                     </TabsTrigger>
                 </TabsList>
 
-                {/* Timeline */}
+                {/* Timeline  */}
                 <TabsContent value="timeline" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-6">
@@ -200,7 +200,9 @@ export default function Index() {
                                         <ChevronLeft className="size-4" />
                                     </button>
                                     <h2 className="text-base font-semibold">
-                                        Aujourd'hui, 24 Octobre
+                                        {/* Aujourd'hui, 24 Octobre */}
+
+                                        {new Date().toISOString()}
                                     </h2>
                                     <button
                                         type="button"
@@ -240,7 +242,7 @@ export default function Index() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-            </Tabs>
-        </DopamineTrackerProvider>
+            </Tabs></>
+   
     );
 }
