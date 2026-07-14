@@ -15,10 +15,22 @@ import { useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
+import { DopamineTrackerProvider } from '../contexts/DopamineTrackerContext';
+import { usePage } from '@inertiajs/react';
+import { Stimulus } from '../types';
 
 type Speed = 'rapide' | 'lente';
 
+interface DopamineTrackerProps {
+    stimulus: Stimulus[];
+    [key: string]: unknown;
+}
+
 export default function Index() {
+    const { stimulus: stimulusData } = usePage<DopamineTrackerProps>().props;
+
+    const [stimulus, setStimulus] = useState(stimulusData);
+
     // L'heure actuelle
     const now = new Date();
     const currentTime = now.toTimeString().slice(0, 5);
@@ -41,18 +53,33 @@ export default function Index() {
         });
 
         if (response.success) {
+            // Alert
+            toast.success(response.message || 'Stimulus crée avec succès');
+
+            // Mise à jour des données du timeLine
+            setStimulus((prev) => [
+                ...prev,
+                {
+                    id: 0,
+                    categorie: category,
+                    intensite: intensity,
+                    label: description,
+                    type: speed,
+                    logged_at: time,
+                },
+            ]);
+
+            // Nettoyage
             setDescription('');
             setCategory('');
             setSpeed('rapide');
             setIntensity(5);
             setTime(currentTime);
-
-            toast.success(response.message || 'Stimulus crée avec succès');
         }
     }
 
     return (
-        <>
+        <DopamineTrackerProvider>
             {/* Formulaire de saisie du déclencheur */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
@@ -156,6 +183,7 @@ export default function Index() {
                     </TabsTrigger>
                 </TabsList>
 
+                {/* Timeline */}
                 <TabsContent value="timeline" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-6">
@@ -198,11 +226,13 @@ export default function Index() {
                                 </div>
                             </div>
 
-                            <DopamineTimeline />
+                            {/* Composant DopamineTimeline */}
+                            <DopamineTimeline stimulus={stimulus} />
                         </CardContent>
                     </Card>
                 </TabsContent>
 
+                {/* Analytique */}
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">
@@ -211,6 +241,6 @@ export default function Index() {
                     </Card>
                 </TabsContent>
             </Tabs>
-        </>
+        </DopamineTrackerProvider>
     );
 }

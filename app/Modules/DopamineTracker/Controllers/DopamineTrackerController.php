@@ -17,7 +17,9 @@ class DopamineTrackerController extends Controller
 
     public function index()
     {
-        return Inertia::render('dopamineTracker/Index');
+        $stimulus = $this->dopamineTrackerService->getStimulusDuJour();
+
+        return Inertia::render('dopamineTracker/Index', ["stimulus" => $stimulus]);
     }
 
     public function store(CreateStimulusRequest $request)

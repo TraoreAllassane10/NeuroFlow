@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('categorie');
             $table->integer('intensite');
             $table->enum('type', ["lente", "rapide"]);
+
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             
             $table->timestamps();
         });
