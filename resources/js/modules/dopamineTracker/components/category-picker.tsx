@@ -1,35 +1,4 @@
-import {
-    BedDouble,
-    Briefcase,
-    Clapperboard,
-    Gamepad2,
-    GraduationCap,
-    MoreHorizontal,
-    ShoppingCart,
-    Smartphone,
-    Swords,
-    UtensilsCrossed,
-    type LucideIcon,
-} from 'lucide-react';
-
-interface Category {
-    key: string;
-    label: string;
-    icon: LucideIcon;
-}
-
-export const categories: Category[] = [
-    { key: 'sommeil', label: 'Sommeil', icon: BedDouble },
-    { key: 'nourriture', label: 'Nourriture', icon: UtensilsCrossed },
-    { key: 'jeu', label: 'Jeu vidéo', icon: Gamepad2 },
-    { key: 'sport', label: 'Sport', icon: Swords },
-    { key: 'education', label: 'Éducation', icon: GraduationCap },
-    { key: 'achats', label: 'Achats', icon: ShoppingCart },
-    { key: 'telephone', label: 'Téléphone', icon: Smartphone },
-    { key: 'divertissement', label: 'Divertissement', icon: Clapperboard },
-    { key: 'travail', label: 'Travail', icon: Briefcase },
-    { key: 'autre', label: 'Autre', icon: MoreHorizontal },
-];
+import { categories } from '../constants/data';
 
 interface CategoryPickerProps {
     value: string;

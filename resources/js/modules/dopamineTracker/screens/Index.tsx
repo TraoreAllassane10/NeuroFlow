@@ -11,26 +11,75 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CategoryPicker } from '../components/category-picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
+import { usePage } from '@inertiajs/react';
+import { Stimulus } from '../types';
 
 type Speed = 'rapide' | 'lente';
 
+interface DopamineTrackerProps {
+    stimulus: Stimulus[];
+    [key: string]: unknown;
+}
+
 export default function Index() {
+    const { stimulus: stimulusData } = usePage<DopamineTrackerProps>().props;
+    const [stimulus, setStimulus] = useState(stimulusData);
+
+
     // L'heure actuelle
     const now = new Date();
     const currentTime = now.toTimeString().slice(0, 5);
-
     const [description, setDescription] = useState('');
     const [speed, setSpeed] = useState<Speed>('rapide');
     const [category, setCategory] = useState('jeu');
     const [intensity, setIntensity] = useState(5);
     const [time, setTime] = useState(currentTime);
+    // L'Etat de la date du timeline
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const { addStimulus } = useStimulus();
+    // HOOK useStimulus
+    const { addStimulus, getStimulusByDate } = useStimulus();
 
+    const datePrecedente = () => {
+        setSelectedDate((prev) => {
+            const date = new Date(prev);
+            date.setDate(date.getDate() - 1);
+            return date;
+        });
+    };
+
+    const dateSuivante = () => {
+        setSelectedDate((prev) => {
+            const date = new Date(prev);
+            date.setDate(date.getDate() + 1);
+            return date;
+        });
+    };
+
+    // Formattage de la date pour l'affichage sur le timeline
+    const formattedDate = selectedDate.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+    });
+
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+
+    // Charge les stimulus
+    async function loadStimulus(date: Date) {
+        const resultat = await getStimulusByDate(date);
+        setStimulus(resultat);
+    }
+
+    useEffect(() => {
+        loadStimulus(selectedDate);
+    }, [selectedDate]);
+
+    // Soumission de stimuls
     async function handleSubmit() {
         const response = await addStimulus({
             description,
@@ -41,19 +90,34 @@ export default function Index() {
         });
 
         if (response.success) {
+            // Alert
+            toast.success(response.message || 'Stimulus crée avec succès');
+
+            // Mise à jour des données du timeLine
+            setStimulus((prev) => [
+                ...prev,
+                {
+                    id: 0,
+                    categorie: category,
+                    intensite: intensity,
+                    label: description,
+                    type: speed,
+                    logged_at: time,
+                },
+            ]);
+
+            // Nettoyage
             setDescription('');
             setCategory('');
             setSpeed('rapide');
             setIntensity(5);
             setTime(currentTime);
-
-            toast.success(response.message || "Stimulus crée avec succès");
         }
     }
 
     return (
         <>
-            {/* Formulaire de saisie du déclencheur */}
+            {/* Formulaire de saisie du déclencheur  */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
                     <h1 className="mb-4 text-lg font-bold text-foreground">
@@ -139,7 +203,7 @@ export default function Index() {
                 </CardContent>
             </Card>
 
-            {/*  Timeline / Analytique */}
+            {/* Timeline / Analytique  */}
             <Tabs defaultValue="timeline">
                 <TabsList className="h-auto justify-start gap-6 rounded-none border-b border-border bg-transparent p-0">
                     <TabsTrigger
@@ -156,13 +220,16 @@ export default function Index() {
                     </TabsTrigger>
                 </TabsList>
 
+                {/* Timeline  */}
                 <TabsContent value="timeline" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-6">
                             <div className="mb-4 flex items-center justify-between">
+                                {/* Date */}
                                 <div className="flex items-center gap-3">
                                     <button
                                         type="button"
+                                        onClick={datePrecedente}
                                         className="text-muted-foreground hover:text-foreground"
                                     >
                                         <span className="sr-only">
@@ -171,11 +238,13 @@ export default function Index() {
                                         <ChevronLeft className="size-4" />
                                     </button>
                                     <h2 className="text-base font-semibold">
-                                        Aujourd'hui, 24 Octobre
+                                        {formattedDate}
                                     </h2>
                                     <button
                                         type="button"
-                                        className="text-muted-foreground hover:text-foreground"
+                                        onClick={dateSuivante}
+                                        className="text-muted-foreground hover:text-foreground disabled:cursor-not-allowed"
+                                        disabled={isToday}
                                     >
                                         <span className="sr-only">
                                             Jour suivant
@@ -184,6 +253,7 @@ export default function Index() {
                                     </button>
                                 </div>
 
+                                {/* Legende */}
                                 <div className="flex items-center gap-4 text-sm">
                                     <span className="flex items-center gap-1.5 text-muted-foreground">
                                         <span className="size-2 rounded-full border-2 border-red-400" />
@@ -196,11 +266,13 @@ export default function Index() {
                                 </div>
                             </div>
 
-                            <DopamineTimeline />
+                            {/* Composant DopamineTimeline */}
+                            <DopamineTimeline stimulus={stimulus} />
                         </CardContent>
                     </Card>
                 </TabsContent>
 
+                {/* Analytique */}
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">

@@ -10,5 +10,5 @@ class StimulusLog extends Model
     /** @use HasFactory<\Database\Factories\StimulusLogFactory> */
     use HasFactory;
 
-    protected $fillable = ["logged_at", "label", "categorie", "intensite", "type"];
+    protected $fillable = ["logged_at", "label", "categorie", "intensite", "type", "user_id"];
 }

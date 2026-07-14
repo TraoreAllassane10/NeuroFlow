@@ -1,45 +1,51 @@
-import { Gamepad2, Minimize2, Smartphone, type LucideIcon } from 'lucide-react';
-import { TimelineEvent } from '../types';
+import { LucideIcon } from 'lucide-react';
+import { categories, hourMarks } from '../constants/data';
+import { Stimulus } from '../types';
 
-
-// À remplacer par les vrais logs du jour sélectionné (props Inertia),
-// avec `type: 'fast' | 'slow' | 'cluster'` selon la donnée réelle.
-const events: TimelineEvent[] = [
-    { hour: 4, type: 'fast', icon: Gamepad2, label: 'Jeu vidéo' },
-    { hour: 12, type: 'cluster', icon: Minimize2, label: 'Plusieurs activités' },
-    { hour: 20, type: 'fast', icon: Smartphone, label: 'Téléphone' },
-];
-
-const hourMarks = [0, 4, 8, 12, 16, 20, 24];
-
-export function DopamineTimeline() {
+export function DopamineTimeline({ stimulus }: { stimulus: Stimulus[] }) {
     return (
         <div>
-            <div className="relative h-40 w-full overflow-hidden rounded-lg bg-linear-to-b from-indigo-50 to-white">
-                {events.map((event) => {
-                    const left = `${(event.hour / 24) * 100}%`;
+            <div className="relative h-40 w-full overflow-hidden rounded-lg bg-linear-to-b from-primary/25 to-white">
+                {stimulus.map((stimulu) => {
+                    // Decoupe l'heure complete en l'heure et miniute puis les convertir en nombre
+                    const [heure, minute] = stimulu.logged_at
+                        .split(':')
+                        .map(Number);
 
-                    if (event.type === 'cluster') {
+                    // Mettre l'heure sous forme decimal
+                    const heureDecimal = heure + minute / 60;
+
+                    // Position du stimulus par rapport au coté gauche (axe d'une journe)
+                    const left = `${(heureDecimal / 24) * 100}%`;
+
+                    const categorie = categories.find(
+                        (c) => c.key === stimulu.categorie,
+                    );
+                    const Icon = categorie?.icon as LucideIcon;
+
+                    // Dopamine lente
+                    if (stimulu.type === 'lente') {
                         return (
                             <div
-                                key={event.label}
-                                title={event.label}
+                                key={stimulu.label}
+                                title={stimulu.label}
                                 className="absolute top-10 flex size-9 -translate-x-1/2 items-center justify-center rounded-lg bg-emerald-700 text-white shadow-sm"
                                 style={{ left }}
                             >
-                                <event.icon className="size-4" />
+                                <Icon className="size-4" />
                             </div>
                         );
                     }
 
+                    // Dopamine rapide
                     return (
                         <div
-                            key={event.label}
-                            title={event.label}
+                            key={stimulu.label}
+                            title={stimulu.label}
                             className="absolute top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-red-300 bg-red-50 text-red-500"
                             style={{ left }}
                         >
-                            <event.icon className="size-4" />
+                            <Icon className="size-4" />
                         </div>
                     );
                 })}
