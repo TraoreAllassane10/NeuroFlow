@@ -13,19 +13,42 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CategoryPicker } from '../components/category-picker';
 import { useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
-
+import useStimulus from '../hooks/useStimulus';
+import { toast } from 'sonner';
 
 type Speed = 'rapide' | 'lente';
 
 export default function Index() {
+    // L'heure actuelle
+    const now = new Date();
+    const currentTime = now.toTimeString().slice(0, 5);
+
     const [description, setDescription] = useState('');
     const [speed, setSpeed] = useState<Speed>('rapide');
     const [category, setCategory] = useState('jeu');
-    const [intensity, setIntensity] = useState(8);
-    const [time, setTime] = useState('14:30');
+    const [intensity, setIntensity] = useState(5);
+    const [time, setTime] = useState(currentTime);
 
-    function handleSubmit() {
-        // À brancher sur router.post(route('dopamine.store'), { description, speed, category, intensity, time })
+    const { addStimulus } = useStimulus();
+
+    async function handleSubmit() {
+        const response = await addStimulus({
+            description,
+            speed,
+            category,
+            intensity,
+            time,
+        });
+
+        if (response.success) {
+            setDescription('');
+            setCategory('');
+            setSpeed('rapide');
+            setIntensity(5);
+            setTime(currentTime);
+
+            toast.success(response.message || "Stimulus crée avec succès");
+        }
     }
 
     return (
