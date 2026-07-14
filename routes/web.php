@@ -13,9 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(DopamineTrackerController::class)->group(function () {
         Route::get('/dopamine-tracker', 'index');
         Route::post('/dopamine-tracker/create', 'store');
+        Route::get('/dopamine-tracker/par-date', 'stimulusParDate');
     });
-
-
 
     Route::get('/flow-engine', function () {
         return Inertia::render('flowEngine/Index');
