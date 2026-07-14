@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BarChart2, BookOpen, Brain, Flower2, FolderGit2, HelpCircle, LayoutGrid, RotateCcw, Settings, Share2, TrendingUp, Waves } from 'lucide-react';
+import { BarChart2, Brain, Flower2, HelpCircle, LayoutGrid, RotateCcw, Settings, Share2, TrendingUp, Waves } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';

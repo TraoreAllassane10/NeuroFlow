@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon } from 'lucide-react';
 
 export interface Category {
     key: string;
@@ -14,4 +14,11 @@ export interface Stimulus {
     type: string;
     logged_at: string;
     created_at?: string;
+}
+
+// Type des données du chart en barre empilee
+export interface WeeklyDopamine {
+    day: string;
+    rapide: number;
+    lente: number;
 }
