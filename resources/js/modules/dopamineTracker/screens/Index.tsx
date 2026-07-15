@@ -278,6 +278,7 @@ export default function Index() {
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                            <h2 className='text-xl text-muted-foreground mb-4'>Evolution des stimulis - 30 derniers jours</h2>
                             <DopamineBarChart data={stimulusChartData!} />
                         </CardContent>
                     </Card>
