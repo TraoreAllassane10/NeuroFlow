@@ -2,6 +2,8 @@ import {
     ChevronLeft,
     ChevronRight,
     Clock,
+    Loader2Icon,
+    Sheet,
     SproutIcon,
     Zap,
 } from 'lucide-react';
@@ -15,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Stimulus, WeeklyDopamine } from '../types';
 import DopamineBarChart from '../components/dopamine-bar-chart';
 
@@ -29,7 +31,8 @@ interface DopamineTrackerProps {
 export default function Index() {
     const { stimulus: stimulusData } = usePage<DopamineTrackerProps>().props;
     const [stimulus, setStimulus] = useState(stimulusData);
-    const [stimulusChartData, setStimulusChartData] = useState<WeeklyDopamine>();
+    const [stimulusChartData, setStimulusChartData] =
+        useState<WeeklyDopamine>();
 
     // L'heure actuelle
     const now = new Date();
@@ -43,7 +46,8 @@ export default function Index() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     // HOOK useStimulus
-    const { addStimulus, getStimulusByDate, getStimulusChartData } = useStimulus();
+    const { addStimulus, getStimulusByDate, getStimulusChartData, loading } =
+        useStimulus();
 
     const datePrecedente = () => {
         setSelectedDate((prev) => {
@@ -79,7 +83,7 @@ export default function Index() {
     // Charge les données du chart
     async function loadDataChart() {
         const resultat = await getStimulusChartData();
-        setStimulusChartData(resultat)
+        setStimulusChartData(resultat);
     }
 
     useEffect(() => {
@@ -88,10 +92,15 @@ export default function Index() {
 
     useEffect(() => {
         loadDataChart();
-    }, [stimulus])
+    }, [stimulus]);
 
     // Soumission de stimulus
     async function handleSubmit() {
+        if (!description) {
+            toast.error("Veuillez décrire l'activité s'il vous plait !");
+            return;
+        }
+
         const response = await addStimulus({
             description,
             speed,
@@ -116,6 +125,11 @@ export default function Index() {
             setTime(currentTime);
         }
     }
+
+    // Export les données en csv
+    const handleExportCsv = () => {
+        window.location.href = '/dopamine-tracker/export-csv';
+    };
 
     return (
         <>
@@ -199,7 +213,11 @@ export default function Index() {
                             onClick={handleSubmit}
                             className="bg-primary hover:bg-indigo-800"
                         >
-                            Ajouter
+                            {loading ? (
+                                <Loader2Icon className="animate-spin text-white" />
+                            ) : (
+                                'Ajouter'
+                            )}
                         </Button>
                     </div>
                 </CardContent>
@@ -221,6 +239,17 @@ export default function Index() {
                         Analytique
                     </TabsTrigger>
                 </TabsList>
+
+                {/* Boutons d'export en csv */}
+                <div className="my-3">
+                    <Button
+                        onClick={handleExportCsv}
+                        className="bg-primary text-white transition"
+                    >
+                        <Sheet />
+                        Exporter en csv
+                    </Button>
+                </div>
 
                 {/* Timeline  */}
                 <TabsContent value="timeline" className="mt-4">
@@ -278,7 +307,9 @@ export default function Index() {
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">
-                            <h2 className='text-xl text-muted-foreground mb-4'>Evolution des stimulis - 30 derniers jours</h2>
+                            <h2 className="mb-4 text-xl text-muted-foreground">
+                                Evolution des stimulis - 30 derniers jours
+                            </h2>
                             <DopamineBarChart data={stimulusChartData!} />
                         </CardContent>
                     </Card>

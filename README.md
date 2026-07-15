@@ -88,6 +88,7 @@ App
             |-----Services
         |---Dopamine_Tracker
             |-----Controllers
+            |-----Exports
             |-----Requests
             |-----Events
             |-----Listeners
@@ -116,7 +117,7 @@ Js
     |----Modules
         |---Dashboard
             |-----components
-            |-----contexts
+            |-----constants
             |-----hooks
             |-----api
             |-----utils
@@ -124,7 +125,7 @@ Js
             |-----pages
         |---Dopamine_Tracker
             |-----components
-            |-----contexts
+            |-----constants
             |-----hooks
             |-----api
             |-----utils
@@ -132,10 +133,10 @@ Js
             |-----pages
         |---Flow_Engine
             |-----components
-            |-----contexts
+            |-----constants
             |-----hooks
             |-----api
             |-----utils
             |-----types
-            |-----pages
+            |-----screens
 ```
