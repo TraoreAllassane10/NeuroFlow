@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { createStimulus, getChartData, stimulusParDate } from '../api';
-import { WeeklyDopamine } from '../types';
 
 export default function useStimulus() {
     const [loading, setLoading] = useState<boolean>(false);
-    const [dataChart, setDataChart] = useState<WeeklyDopamine | []>([]);
 
     const getStimulusByDate = async (date: Date) => {
         // formattage de la date sous la forme de 2026/07/14
@@ -20,18 +18,26 @@ export default function useStimulus() {
     };
 
     const addStimulus = async (data: any) => {
-        const newStimulus = {
-            label: data.description,
-            categorie: data.category,
-            intensite: data.intensity,
-            type: data.speed,
-            logged_at: data.time,
-        };
+        try {
+            setLoading(true);
 
-        const response = await createStimulus(newStimulus);
+            const newStimulus = {
+                label: data.description,
+                categorie: data.category,
+                intensite: data.intensity,
+                type: data.speed,
+                logged_at: data.time,
+            };
 
-        return response;
+            const response = await createStimulus(newStimulus);
+
+            return response;
+        } catch (error) {
+            console.log('Erreur survenue dans addStimulus', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return { addStimulus, getStimulusByDate, getStimulusChartData };
+    return { addStimulus, getStimulusByDate, getStimulusChartData, loading };
 }

@@ -2,6 +2,7 @@ import {
     ChevronLeft,
     ChevronRight,
     Clock,
+    Loader2Icon,
     Sheet,
     SproutIcon,
     Zap,
@@ -45,7 +46,7 @@ export default function Index() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     // HOOK useStimulus
-    const { addStimulus, getStimulusByDate, getStimulusChartData } =
+    const { addStimulus, getStimulusByDate, getStimulusChartData, loading } =
         useStimulus();
 
     const datePrecedente = () => {
@@ -95,6 +96,11 @@ export default function Index() {
 
     // Soumission de stimulus
     async function handleSubmit() {
+        if (!description) {
+            toast.error("Veuillez décrire l'activité s'il vous plait !");
+            return;
+        }
+
         const response = await addStimulus({
             description,
             speed,
@@ -207,7 +213,11 @@ export default function Index() {
                             onClick={handleSubmit}
                             className="bg-primary hover:bg-indigo-800"
                         >
-                            Ajouter
+                            {loading ? (
+                                <Loader2Icon className="animate-spin text-white" />
+                            ) : (
+                                'Ajouter'
+                            )}
                         </Button>
                     </div>
                 </CardContent>
