@@ -35,6 +35,16 @@ class DopamineTrackerController extends Controller
         }
     }
 
+    public function dataChart() {
+         try {
+            $data = $this->dopamineTrackerService->getDataChart();
+            return response()->json(['success' => true, "data" => $data]);
+        } catch (Exception $e) {
+            Log::error('Une erreur est survenue lors du chargement des donnnées pour le graphique', ["erreur" => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors du chargement des données pour le graphique']);
+        }
+    }
+
     public function store(CreateStimulusRequest $request)
     {
         try {

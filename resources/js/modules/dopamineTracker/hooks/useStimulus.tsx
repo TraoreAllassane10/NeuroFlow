@@ -1,11 +1,21 @@
-import { createStimulus, stimulusParDate } from '../api';
+import { useState } from 'react';
+import { createStimulus, getChartData, stimulusParDate } from '../api';
+import { WeeklyDopamine } from '../types';
 
 export default function useStimulus() {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [dataChart, setDataChart] = useState<WeeklyDopamine | []>([]);
+
     const getStimulusByDate = async (date: Date) => {
         // formattage de la date sous la forme de 2026/07/14
         const formattedDate = date.toISOString().split('T')[0];
 
         const response = await stimulusParDate(formattedDate);
+        return response.data;
+    };
+
+    const getStimulusChartData = async () => {
+        const response = await getChartData();
         return response.data;
     };
 
@@ -23,5 +33,5 @@ export default function useStimulus() {
         return response;
     };
 
-    return { addStimulus, getStimulusByDate };
+    return { addStimulus, getStimulusByDate, getStimulusChartData };
 }
