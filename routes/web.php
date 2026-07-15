@@ -14,6 +14,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dopamine-tracker', 'index');
         Route::post('/dopamine-tracker/create', 'store');
         Route::get('/dopamine-tracker/par-date', 'stimulusParDate');
+        Route::get('/dopamine-tracker/chart', 'dataChart');
     });
 
     Route::get('/flow-engine', function () {

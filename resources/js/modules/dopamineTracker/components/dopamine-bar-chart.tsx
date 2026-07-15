@@ -8,12 +8,12 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import { dataChart } from '../constants/data';
 
-const DopamineBarChart = () => {
+const DopamineBarChart = ({data} : {data: any}) => {
+
     return (
         <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={dataChart}>
+            <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
 
                 <XAxis dataKey="day" />

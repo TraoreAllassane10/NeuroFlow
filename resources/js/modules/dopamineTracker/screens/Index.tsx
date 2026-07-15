@@ -16,7 +16,7 @@ import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
 import { usePage } from '@inertiajs/react';
-import { Stimulus } from '../types';
+import { Stimulus, WeeklyDopamine } from '../types';
 import DopamineBarChart from '../components/dopamine-bar-chart';
 
 type Speed = 'rapide' | 'lente';
@@ -29,7 +29,7 @@ interface DopamineTrackerProps {
 export default function Index() {
     const { stimulus: stimulusData } = usePage<DopamineTrackerProps>().props;
     const [stimulus, setStimulus] = useState(stimulusData);
-
+    const [stimulusChartData, setStimulusChartData] = useState<WeeklyDopamine>();
 
     // L'heure actuelle
     const now = new Date();
@@ -43,7 +43,7 @@ export default function Index() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     // HOOK useStimulus
-    const { addStimulus, getStimulusByDate } = useStimulus();
+    const { addStimulus, getStimulusByDate, getStimulusChartData } = useStimulus();
 
     const datePrecedente = () => {
         setSelectedDate((prev) => {
@@ -76,11 +76,21 @@ export default function Index() {
         setStimulus(resultat);
     }
 
+    // Charge les données du chart
+    async function loadDataChart() {
+        const resultat = await getStimulusChartData();
+        setStimulusChartData(resultat)
+    }
+
     useEffect(() => {
         loadStimulus(selectedDate);
     }, [selectedDate]);
 
-    // Soumission de stimuls
+    useEffect(() => {
+        loadDataChart();
+    }, [stimulus])
+
+    // Soumission de stimulus
     async function handleSubmit() {
         const response = await addStimulus({
             description,
@@ -95,17 +105,8 @@ export default function Index() {
             toast.success(response.message || 'Stimulus crée avec succès');
 
             // Mise à jour des données du timeLine
-            setStimulus((prev) => [
-                ...prev,
-                {
-                    id: 0,
-                    categorie: category,
-                    intensite: intensity,
-                    label: description,
-                    type: speed,
-                    logged_at: time,
-                },
-            ]);
+            // Le chargement de date provoque un rechargement des données depuis la bd
+            setSelectedDate(new Date());
 
             // Nettoyage
             setDescription('');
@@ -277,7 +278,7 @@ export default function Index() {
                 <TabsContent value="analytique" className="mt-4">
                     <Card className="border-border/60">
                         <CardContent className="py-10 text-center text-sm text-muted-foreground">
-                            <DopamineBarChart />
+                            <DopamineBarChart data={stimulusChartData!} />
                         </CardContent>
                     </Card>
                 </TabsContent>
