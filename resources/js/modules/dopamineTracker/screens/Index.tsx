@@ -1,4 +1,5 @@
 import {
+    BookOpen,
     ChevronLeft,
     ChevronRight,
     Clock,
@@ -17,9 +18,10 @@ import { useEffect, useState } from 'react';
 import { DopamineTimeline } from '../components/dopamine-timeline';
 import useStimulus from '../hooks/useStimulus';
 import { toast } from 'sonner';
-import { router, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { Stimulus, WeeklyDopamine } from '../types';
 import DopamineBarChart from '../components/dopamine-bar-chart';
+import ModalReportExport from '../components/modal-report-export';
 
 type Speed = 'rapide' | 'lente';
 
@@ -44,6 +46,7 @@ export default function Index() {
     const [time, setTime] = useState(currentTime);
     // L'Etat de la date du timeline
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [openDialogReport, setOpenDialogReport] = useState<boolean>(false);
 
     // HOOK useStimulus
     const { addStimulus, getStimulusByDate, getStimulusChartData, loading } =
@@ -135,6 +138,12 @@ export default function Index() {
     // Export les données en csv
     const handleExportCsv = () => {
         window.location.href = '/dopamine-tracker/export-csv';
+    };
+
+    // Genere le rapport
+    const handleGenerateReport = () => {
+        window.location.href = '/dopamine-tracker/rapport';
+        setOpenDialogReport(false);
     };
 
     return (
@@ -246,17 +255,6 @@ export default function Index() {
                     </TabsTrigger>
                 </TabsList>
 
-                {/* Boutons d'export en csv */}
-                <div className="my-3">
-                    <Button
-                        onClick={handleExportCsv}
-                        className="bg-primary text-white transition"
-                    >
-                        <Sheet />
-                        Exporter en csv
-                    </Button>
-                </div>
-
                 {/* Timeline  */}
                 <TabsContent value="timeline" className="mt-4">
                     <Card className="border-border/60">
@@ -321,6 +319,34 @@ export default function Index() {
                     </Card>
                 </TabsContent>
             </Tabs>
+
+            {/* Bouton export csv et generateur de raport */}
+            <div className="my-3 flex items-center gap-4">
+                {/* Boutons d'export en csv */}
+                <Button
+                    onClick={handleExportCsv}
+                    className="bg-primary text-white transition"
+                >
+                    <Sheet />
+                    Exporter en csv
+                </Button>
+
+                {/* Bouton de generation de rapport */}
+                <Button
+                    onClick={() => setOpenDialogReport(true)}
+                    className="bg-primary text-white transition"
+                >
+                    <BookOpen />
+                    Générer un rapport
+                </Button>
+            </div>
+
+            {/* Modal du generateur de rapport */}
+            <ModalReportExport
+                open={openDialogReport}
+                onOpenChange={setOpenDialogReport}
+                onGenerate={handleGenerateReport}
+            />
         </>
     );
 }
