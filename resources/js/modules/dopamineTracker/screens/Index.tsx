@@ -50,6 +50,9 @@ export default function Index() {
         useStimulus();
 
     const datePrecedente = () => {
+        // Nettoyage du timeline
+        setStimulus([]);
+
         setSelectedDate((prev) => {
             const date = new Date(prev);
             date.setDate(date.getDate() - 1);
@@ -58,6 +61,9 @@ export default function Index() {
     };
 
     const dateSuivante = () => {
+        // Nettoyage du timeline
+        setStimulus([]);
+
         setSelectedDate((prev) => {
             const date = new Date(prev);
             date.setDate(date.getDate() + 1);
