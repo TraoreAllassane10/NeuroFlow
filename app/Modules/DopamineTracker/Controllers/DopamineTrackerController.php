@@ -3,6 +3,7 @@
 namespace App\Modules\DopamineTracker\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\StimulusLog;
 use App\Modules\DopamineTracker\Exports\StimulusLogExport;
 use App\Modules\DopamineTracker\Requests\CreateStimulusRequest;
 use App\Modules\DopamineTracker\Services\DopamineTrackerService;
@@ -37,6 +38,19 @@ class DopamineTrackerController extends Controller
             Log::error('Une erreur est survenue lors du chargement des stimulus', ["erreur" => $e->getMessage()]);
             return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors du chargement des stimulus']);
         }
+    }
+
+    public function show(StimulusLog $stimuli)
+    {
+        return response()->json(["success" => true, "data" => [
+            "id" => $stimuli->id,
+            "label" => $stimuli->label,
+            "logged_at" => $stimuli->logged_at,
+            "categorie" => $stimuli->categorie,
+            "intensite" => $stimuli->intensite,
+            "type" => $stimuli->type,
+            "created_at" => $stimuli->created_at->translatedFormat("l j F Y")
+        ]]);
     }
 
     public function dataChart()

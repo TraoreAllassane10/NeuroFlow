@@ -1,5 +1,14 @@
 import axios from 'axios';
 
+export const stimulusParId = async (id: number) => {
+     try {
+        const response = await axios.get(`/dopamine-tracker/${id}/show`);
+        return response.data;
+    } catch (error) {
+        console.log('Erreur survenue dans stimulusParId', error);
+    }
+}
+
 export const stimulusParDate = async (date: string) => {
     try {
         const response = await axios.get(`/dopamine-tracker/par-date?date=${date}`);
