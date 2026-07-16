@@ -2,10 +2,13 @@
 
 namespace App\Modules\DopamineTracker\Services;
 
+use App\Models\StimulusLog;
 use App\Models\User;
 use App\Modules\DopamineTracker\Repositories\DopamineTrackerRepository;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DopamineTrackerService
 {
@@ -43,5 +46,14 @@ class DopamineTrackerService
         $data['user_id'] = $user->id;
 
         return $this->dopamineTrackerRepository->create($data);
+    }
+
+    public function deleteStimulus(StimulusLog $stimulusLog)
+    {
+        try {
+           return  $stimulusLog->delete();
+        } catch (Exception $e) {
+            Log::info('Erreur survenue lors de la suppresion d\'un stimulis', ["error" => $e->getMessage()]);
+        }
     }
 }

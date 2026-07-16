@@ -3,33 +3,27 @@ import { categories, hourMarks } from '../constants/data';
 import { Stimulus } from '../types';
 import { useState } from 'react';
 import ShowStimulis from './show-stimulis';
-import { toast } from 'sonner';
 
 export function DopamineTimeline({ stimulus }: { stimulus: Stimulus[] }) {
     const [stimuliId, setStimuliId] = useState<number | null>(null);
     const [openShowDialog, setOpenShowDialog] = useState<boolean>(false);
 
     const handleShowDialog = (id: number) => {
-        setStimuliId(id);
-
-        // if (!stimuliId) {
-        //     toast.error("Ce stimuli n'existe plus ! ");
-        //     return;
-        // }
-
-        setOpenShowDialog(true);
+        if (id) {
+            setStimuliId(id);
+            setOpenShowDialog(true);
+        }
     };
 
     return (
         <div>
             {/* Modal d'affichage de detail */}
-            {openShowDialog && (
-                <ShowStimulis
-                    open={openShowDialog}
-                    onOpenChange={setOpenShowDialog}
-                    stimuliId={stimuliId!}
-                />
-            )}
+
+            <ShowStimulis
+                open={openShowDialog}
+                onOpenChange={setOpenShowDialog}
+                stimuliId={stimuliId!}
+            />
 
             <div className="relative h-40 w-full overflow-hidden rounded-lg bg-linear-to-b from-primary/25 to-white">
                 {stimulus.map((stimulu) => {

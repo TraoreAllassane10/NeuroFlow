@@ -35,3 +35,12 @@ export const createStimulus = async (data: any) => {
         console.log('Erreur survenue dans createStimulus', error);
     }
 };
+
+export const destroyStimuli = async (id: number) => {
+     try {
+        const response = await axios.delete(`/dopamine-tracker/${id}/delete`);
+        return response.data;
+    } catch (error) {
+        console.log('Erreur survenue dans destroyStimuli', error);
+    }
+}

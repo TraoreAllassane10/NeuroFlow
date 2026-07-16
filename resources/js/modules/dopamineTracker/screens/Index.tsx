@@ -125,7 +125,7 @@ export default function Index() {
 
             // Nettoyage
             setDescription('');
-            setCategory('');
+            setCategory('jeu');
             setSpeed('rapide');
             setIntensity(5);
             setTime(currentTime);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
     createStimulus,
+    destroyStimuli,
     getChartData,
     stimulusParDate,
     stimulusParId,
@@ -56,5 +57,17 @@ export default function useStimulus() {
         }
     };
 
-    return { addStimulus, getStimulusByDate, getStimulusChartData, getStimulusParId, loading };
+    const deleteStimulus = async (id: number) => {
+        try {
+            setLoading(true);
+            const response = await destroyStimuli(id);
+            return response;
+        } catch (error) {
+            console.log('Erreur servenue dans deleteStimulus', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { addStimulus, getStimulusByDate, getStimulusChartData, getStimulusParId, deleteStimulus, loading };
 }

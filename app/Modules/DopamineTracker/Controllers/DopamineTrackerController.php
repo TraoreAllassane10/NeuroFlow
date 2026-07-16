@@ -82,4 +82,15 @@ class DopamineTrackerController extends Controller
             return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors de la creation d\'un stimulus']);
         }
     }
+
+    public function destroy(StimulusLog $stimuli)
+    {
+        $stimuliSupprime =  $this->dopamineTrackerService->deleteStimulus($stimuli);
+
+        if ($stimuliSupprime) {
+            return response()->json(["success" => true, "message" => "Stimuli supprimé avec succès"]);
+        } else {
+            return response()->json(["success" => false, "message" => "La suppression a echoué ! Veuillez ressayer"]);
+        }
+    }
 }

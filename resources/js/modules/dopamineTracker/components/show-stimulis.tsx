@@ -11,6 +11,8 @@ import useStimulus from '../hooks/useStimulus';
 import { Stimulus } from '../types';
 import { Loader2Icon, LucideIcon, MoreHorizontal } from 'lucide-react';
 import { categories } from '../constants/data';
+import { toast } from 'sonner';
+import { router } from '@inertiajs/react';
 
 interface ShowStimulisProps {
     open: boolean;
@@ -20,7 +22,7 @@ interface ShowStimulisProps {
 
 const ShowStimulis = ({ open, onOpenChange, stimuliId }: ShowStimulisProps) => {
     const [stimuli, setStimuli] = useState<Stimulus | null>(null);
-    const { getStimulusParId, loading } = useStimulus();
+    const { getStimulusParId, deleteStimulus, loading } = useStimulus();
     let Icon: LucideIcon = MoreHorizontal;
 
     if (stimuli) {
@@ -39,9 +41,30 @@ const ShowStimulis = ({ open, onOpenChange, stimuliId }: ShowStimulisProps) => {
     }
 
     useEffect(() => {
-        setStimuli(null);
-        loadStimulus();
-    }, []);
+        if (open) {
+            setStimuli(null);
+            loadStimulus();
+        }
+    }, [open, stimuliId]);
+
+    const handleDelete = async () => {
+        if (stimuli?.id) {
+            const response = await deleteStimulus(stimuli.id);
+
+            if (response.success) {
+                toast.success(response.message);
+                onOpenChange(false);
+
+                // Je recharge la page parce que le composant de la page ne sait pas ce qui se passe dans le composant timeline
+                // Autrement dire , il ne connait pas les etats .
+                // Or, c'est lui qui recupere les données.
+                // Comme il ne connait l'etat du timeline, il ne pourra pas savoir qu'une suppression a été faite afin de recharger les données
+                router.visit('/dopamine-tracker');
+            }
+        } else {
+            toast.error('Echec lors de la suppression ! Veuillez ressayer.');
+        }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,16 +90,21 @@ const ShowStimulis = ({ open, onOpenChange, stimuliId }: ShowStimulisProps) => {
                             </DialogTitle>
                         </DialogHeader>
 
-                        <div className='text-muted-foreground text-sm'>
+                        <div className="text-sm text-muted-foreground">
                             {stimuli?.created_at} à {stimuli?.logged_at}
                         </div>
 
                         <DialogFooter className="pt-4">
                             <Button
                                 size={'sm'}
+                                onClick={handleDelete}
                                 className="bg-red-700 transition hover:bg-red-800"
                             >
-                                Supprimer
+                                {loading ? (
+                                    <Loader2Icon className="animate-spin" />
+                                ) : (
+                                    'Supprimer'
+                                )}
                             </Button>
                         </DialogFooter>
                     </>
