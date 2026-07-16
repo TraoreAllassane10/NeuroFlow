@@ -3,6 +3,7 @@
 namespace App\Modules\DopamineTracker\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\StimulusLog;
 use App\Modules\DopamineTracker\Exports\StimulusLogExport;
 use App\Modules\DopamineTracker\Requests\CreateStimulusRequest;
 use App\Modules\DopamineTracker\Services\DopamineTrackerService;
@@ -39,6 +40,19 @@ class DopamineTrackerController extends Controller
         }
     }
 
+    public function show(StimulusLog $stimuli)
+    {
+        return response()->json(["success" => true, "data" => [
+            "id" => $stimuli->id,
+            "label" => $stimuli->label,
+            "logged_at" => $stimuli->logged_at,
+            "categorie" => $stimuli->categorie,
+            "intensite" => $stimuli->intensite,
+            "type" => $stimuli->type,
+            "created_at" => $stimuli->created_at->translatedFormat("l j F Y")
+        ]]);
+    }
+
     public function dataChart()
     {
         try {
@@ -66,6 +80,17 @@ class DopamineTrackerController extends Controller
         } catch (Exception $e) {
             Log::error('Une erreur est survenue lors de la creation d\'un stimulus', ["erreur" => $e->getMessage()]);
             return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors de la creation d\'un stimulus']);
+        }
+    }
+
+    public function destroy(StimulusLog $stimuli)
+    {
+        $stimuliSupprime =  $this->dopamineTrackerService->deleteStimulus($stimuli);
+
+        if ($stimuliSupprime) {
+            return response()->json(["success" => true, "message" => "Stimuli supprimé avec succès"]);
+        } else {
+            return response()->json(["success" => false, "message" => "La suppression a echoué ! Veuillez ressayer"]);
         }
     }
 }

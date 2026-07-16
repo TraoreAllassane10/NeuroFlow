@@ -12,10 +12,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Modules Dopamine Tracker
     Route::controller(DopamineTrackerController::class)->group(function () {
         Route::get('/dopamine-tracker', 'index');
+        Route::get('/dopamine-tracker/{stimuli}/show', 'show');
         Route::post('/dopamine-tracker/create', 'store');
         Route::get('/dopamine-tracker/par-date', 'stimulusParDate');
         Route::get('/dopamine-tracker/chart', 'dataChart');
         Route::get('/dopamine-tracker/export-csv', 'exportCsv');
+        Route::delete('/dopamine-tracker/{stimuli}/delete', 'destroy');
     });
 
     Route::get('/flow-engine', function () {

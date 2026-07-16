@@ -1,8 +1,26 @@
 import { useState } from 'react';
-import { createStimulus, getChartData, stimulusParDate } from '../api';
+import {
+    createStimulus,
+    destroyStimuli,
+    getChartData,
+    stimulusParDate,
+    stimulusParId,
+} from '../api';
 
 export default function useStimulus() {
     const [loading, setLoading] = useState<boolean>(false);
+
+    const getStimulusParId = async (id: number) => {
+        try {
+            setLoading(true);
+            const response = await stimulusParId(id);
+            return response.data;
+        } catch (error) {
+            console.log('Erreur servenue dans getStimulusParId', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const getStimulusByDate = async (date: Date) => {
         // formattage de la date sous la forme de 2026/07/14
@@ -39,5 +57,17 @@ export default function useStimulus() {
         }
     };
 
-    return { addStimulus, getStimulusByDate, getStimulusChartData, loading };
+    const deleteStimulus = async (id: number) => {
+        try {
+            setLoading(true);
+            const response = await destroyStimuli(id);
+            return response;
+        } catch (error) {
+            console.log('Erreur servenue dans deleteStimulus', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { addStimulus, getStimulusByDate, getStimulusChartData, getStimulusParId, deleteStimulus, loading };
 }
