@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\DopamineTracker\Controllers\DopamineTrackerController;
+use App\Modules\DopamineTracker\Controllers\RapportController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dopamine-tracker/export-csv', 'exportCsv');
         Route::delete('/dopamine-tracker/{stimuli}/delete', 'destroy');
     });
+    Route::get('/dopamine-tracker/rapport', [RapportController::class, 'generer']);
 
     Route::get('/flow-engine', function () {
         return Inertia::render('flowEngine/Index');
