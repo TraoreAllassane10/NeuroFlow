@@ -95,6 +95,13 @@ App
             |-----Ressources
             |-----Repositories
             |-----Services
+                    |---Rapport
+                        |----AnalyseurStimulisService.php 
+                        |---- CalculateurRatio.php 
+                        |----AnalyseurTrend.php           
+                        |----GenerateurRecommandation.php
+                        |---RapportManager.php
+                    |---PdfGenerateurService.php
         |---Flow_Engine
             |-----Controllers
             |-----Requests

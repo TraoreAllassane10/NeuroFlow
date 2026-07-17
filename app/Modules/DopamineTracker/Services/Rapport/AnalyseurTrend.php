@@ -2,13 +2,18 @@
 
 namespace App\Modules\DopamineTracker\Services\Rapport;
 
+use App\Models\User;
+use App\Modules\DopamineTracker\Repositories\DopamineTrackerRepository;
+
 class AnalyseurTrend
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+
+    public function __construct(
+        protected DopamineTrackerRepository $dopamineTrackerRepository
+    ) {}
+
+    public function execute(User $user)
     {
-        //
+        return $this->dopamineTrackerRepository->dataChart($user);
     }
 }

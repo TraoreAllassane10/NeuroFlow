@@ -52,7 +52,7 @@ const ModalReportExport = ({ open, onOpenChange, onGenerate }: ModalReportExport
                     <Button
                         size={'sm'}
                         onClick={onGenerate}
-                        className="bg-red-700 transition hover:bg-red-800"
+                        className="bg-primary transition hover:bg-indigo-800"
                     >
                         Generer
                     </Button>
