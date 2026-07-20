@@ -5,6 +5,9 @@ export type User = {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    chronotype: string | null;
+    objectif_principal: string | null;
+    heure_reveille: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
