@@ -17,7 +17,7 @@ class OnboardingMiddleware
     {
         $user = $request->user();
 
-        if ($user->chronotype === null || $user->heure_reveille === null || $user->objectif_principal === null) {
+        if ($user->chronotype === null || $user->objectif_principal === null) {
             return redirect()->route('onboarding.index');
         }
 
