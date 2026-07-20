@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Dashboard\Controllers\DashboardController;
 use App\Modules\DopamineTracker\Controllers\DopamineTrackerController;
 use App\Modules\DopamineTracker\Controllers\RapportController;
 use Illuminate\Support\Facades\Route;
@@ -8,10 +9,15 @@ use Inertia\Inertia;
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])
+        ->middleware('onboarding')->name('dashboard');
+
+    Route::get('/onboarding', function () {
+        return Inertia::render('onboarding');
+    })->name("onboarding.index");
 
     // Modules Dopamine Tracker
-    Route::controller(DopamineTrackerController::class)->group(function () {
+    Route::middleware('onboarding')->controller(DopamineTrackerController::class)->group(function () {
         Route::get('/dopamine-tracker', 'index')->name('dopamine-tracker.index');
         Route::get('/dopamine-tracker/{stimuli}/show', 'show')->name('dopamine-tracker.show');
         Route::post('/dopamine-tracker/create', 'store')->name('dopamine-tracker.store');
