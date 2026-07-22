@@ -1,7 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 
 import { dashboard } from '@/routes';
-import { metrics, protocolActions } from '@/modules/dashboard/constant/data';
+import {  protocolActions } from '@/modules/dashboard/constant/data';
 import { Card, CardContent } from '@/components/ui/card';
 import MetricJauge from '@/modules/dashboard/components/metric-jauge';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,14 @@ import { EvolutionChart } from '@/modules/dashboard/components/EvolutionChart';
 import { StimulusList } from '@/modules/dashboard/components/StimulusList';
 
 export default function Dashboard() {
-    const { user } = usePage().props.auth;
+    const { auth, neuro_scores } = usePage().props;
+
+    const metrics = [
+    { key: 'dopamine', label: 'Dopamine', value: neuro_scores.score_dopamine, color: '#E0A030' },
+    { key: 'cortisol', label: 'Cortisol', value: neuro_scores.score_cortisol, color: '#C23B3B' },
+    { key: 'serotonin', label: 'Serotonine', value: neuro_scores.score_serotonine, color: '#5FCFB0' },
+    { key: 'oxytocin', label: 'Oxytocin', value: neuro_scores.score_oxytocine, color: '#2F6FBA' },
+];
     return (
         <>
             <Head title="Dashboard" />
@@ -26,7 +33,7 @@ export default function Dashboard() {
             {/* Titre et Statut */}
             <div>
                 <h1 className="mb-4 text-2xl font-bold text-foreground">
-                    Bonjour {user.name} - Voici ton état neurochimique
+                    Bonjour {auth.user.name} - Voici ton état neurochimique
                 </h1>
 
                 <div className="mb-4 flex items-center gap-2 text-red-600">
