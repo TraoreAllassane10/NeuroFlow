@@ -76,11 +76,13 @@ export function CheckInDialog({
 
         const response = await createDailyCheckin(newDailyCheckin);
 
-        if (response && response.success) {
+        if (response.success) {
             toast.success(
                 response.message || 'Checkin du jour éffectué avec succès',
             );
             router.reload();
+        } else {
+            toast.error(response.message);
         }
 
         onOpenChange(false);

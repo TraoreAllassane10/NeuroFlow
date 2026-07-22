@@ -15,8 +15,19 @@ class DailyCheckinController extends Controller
     {
         $data = $request->validated();
 
-        $this->dailyCheckinService->createDailyCheckin($data);
+        $data = $this->dailyCheckinService->createDailyCheckin($data);
 
-        return response()->json(["success" => true, "message" => "Checkin du jour effectué avec succès !"]);
+        if ($data['success']) {
+            if ($data['checkin_du_jour'] && $data['neuro_score_du_jour']) {
+                return response()->json(["success" => true, "message" => "Checkin du jour effectué avec succès !"]);
+            } else if ($data['checkin_du_jour'] && !$data['neuro_score_du_jour']) {
+
+                return response()->json(["success" => false, "message" => "Erreur suvenue lors du calcule des scores"]);
+            }
+        } else if ($data['success'] === false) {
+            return response()->json(["success" => false, "message" => "Vous avez dejà fait le checkin d'aujourd'hui !"]);
+        } else {
+            return response()->json(["success" => false, "message" => "Erreur suvenue lors du l'enregistrement du checkin"]);
+        }
     }
 }
