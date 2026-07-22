@@ -18,7 +18,6 @@ export default function AppSidebarLayout({
                 <CheckInDialog
                     open={openCheckin}
                     onOpenChange={setOpenCheckin}
-                    onSubmit={() => console.log('ok')}
                 />
             )}
             <AppSidebar />

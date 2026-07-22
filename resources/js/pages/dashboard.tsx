@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 import { dashboard } from '@/routes';
 import { metrics, protocolActions } from '@/modules/dashboard/constant/data';
@@ -18,6 +18,7 @@ import { EvolutionChart } from '@/modules/dashboard/components/EvolutionChart';
 import { StimulusList } from '@/modules/dashboard/components/StimulusList';
 
 export default function Dashboard() {
+    const { user } = usePage().props.auth;
     return (
         <>
             <Head title="Dashboard" />
@@ -25,7 +26,7 @@ export default function Dashboard() {
             {/* Titre et Statut */}
             <div>
                 <h1 className="mb-4 text-2xl font-bold text-foreground">
-                    Bonjour Allassane - Voici ton état neurochimique
+                    Bonjour {user.name} - Voici ton état neurochimique
                 </h1>
 
                 <div className="mb-4 flex items-center gap-2 text-red-600">

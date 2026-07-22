@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DailyCheckinController;
+use App\Http\Controllers\OnboardingController;
 use App\Modules\Dashboard\Controllers\DashboardController;
 use App\Modules\DopamineTracker\Controllers\DopamineTrackerController;
 use App\Modules\DopamineTracker\Controllers\RapportController;
@@ -12,9 +14,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])
         ->middleware('onboarding')->name('dashboard');
 
-    Route::get('/onboarding', function () {
-        return Inertia::render('onboarding');
-    })->name("onboarding.index");
+    // Onboarding
+    Route::get('/onboarding', [OnboardingController::class, 'index'])->name("onboarding.index");
+    Route::post('/onboarding', [OnboardingController::class, 'update'])->name('onboarding.update');
+
+    // Daily Checkin
+    Route::post('/daily-checkin', [DailyCheckinController::class, 'store'])->name('daily-chekin.store');
 
     // Modules Dopamine Tracker
     Route::middleware('onboarding')->controller(DopamineTrackerController::class)->group(function () {
