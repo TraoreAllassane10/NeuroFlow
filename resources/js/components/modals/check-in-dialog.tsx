@@ -9,27 +9,22 @@ import {
 } from '@/components/ui/dialog';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
-
-const needsOptions = [
-    'Concentration',
-    'Calme',
-    'Motivation',
-    'Récupération',
-] as const;
+import useDailyCheckin from '@/hooks/useDailyCheckin';
+import { CreateDailyData } from '@/types';
+import { toast } from 'sonner';
+import { router } from '@inertiajs/react';
 
 export interface CheckInPayload {
     mood: number;
     sleepQuality: number;
     energyLevel: number;
     notes: string;
-    needs: string[];
 }
 
 interface CheckInDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     date?: string;
-    onSubmit?: (payload: CheckInPayload) => void;
 }
 
 interface SliderFieldProps {
@@ -62,27 +57,32 @@ export function CheckInDialog({
     open,
     onOpenChange,
     date = "Aujourd'hui",
-    onSubmit,
 }: CheckInDialogProps) {
     const [mood, setMood] = useState(7);
     const [sleepQuality, setSleepQuality] = useState(5);
     const [energyLevel, setEnergyLevel] = useState(8);
     const [notes, setNotes] = useState('');
-    const [needs, setNeeds] = useState<string[]>([
-        'Concentration',
-        'Motivation',
-    ]);
 
-    function toggleNeed(need: string) {
-        setNeeds((prev) =>
-            prev.includes(need)
-                ? prev.filter((n) => n !== need)
-                : [...prev, need],
-        );
-    }
+    const { createDailyCheckin } = useDailyCheckin();
 
-    function handleSubmit() {
-        onSubmit?.({ mood, sleepQuality, energyLevel, notes, needs });
+    async function handleSubmit() {
+        // Preparation de l'objet à envoyer au backend
+        const newDailyCheckin: CreateDailyData = {
+            humeur: mood,
+            qualite_sommeil: sleepQuality,
+            niveau_energie: energyLevel,
+            note: notes,
+        };
+
+        const response = await createDailyCheckin(newDailyCheckin);
+
+        if (response && response.success) {
+            toast.success(
+                response.message || 'Checkin du jour éffectué avec succès',
+            );
+            router.reload();
+        }
+
         onOpenChange(false);
     }
 
@@ -123,32 +123,6 @@ export function CheckInDialog({
                             placeholder="Comment vous sentez-vous aujourd'hui ?"
                             className="min-h-28 resize-none bg-muted/30"
                         />
-                    </div>
-
-                    <div>
-                        <p className="mb-2 text-sm text-foreground">
-                            Besoins immédiats
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                            {needsOptions.map((need) => {
-                                const active = needs.includes(need);
-                                return (
-                                    <button
-                                        key={need}
-                                        type="button"
-                                        onClick={() => toggleNeed(need)}
-                                        aria-pressed={active}
-                                        className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
-                                            active
-                                                ? 'border-indigo-300 bg-indigo-50 text-primary'
-                                                : 'border-border text-foreground hover:bg-muted'
-                                        }`}
-                                    >
-                                        {need}
-                                    </button>
-                                );
-                            })}
-                        </div>
                     </div>
                 </div>
 
