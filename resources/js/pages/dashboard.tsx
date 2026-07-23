@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 
 import { dashboard } from '@/routes';
 import { protocolActions } from '@/modules/dashboard/constant/data';
@@ -23,7 +23,7 @@ type Period = '7j' | '30j' | '90j';
 const graph_periods: Period[] = ['7j', '30j', '90j'];
 
 export default function Dashboard() {
-    const { auth, neuro_scores, graphique } = usePage().props;
+    const { auth, neuro_scores, graphique, recent_stimuli } = usePage().props;
 
     const [period, setPeriod] = useState<'7j' | '30j' | '90j'>('7j');
     const [evolutionData, setEvolutionData] = useState(graphique.evolution);
@@ -216,10 +216,19 @@ export default function Dashboard() {
             {/* Derniers stimulus */}
             <Card className="border-border/60">
                 <CardContent className="py-6">
-                    <h2 className="mb-2 text-base font-semibold">
-                        Derniers stimulus
-                    </h2>
-                    <StimulusList />
+                    <div className="flex items-center justify-between">
+                        <h2 className="mb-2 text-base font-semibold">
+                            Derniers stimulus
+                        </h2>
+
+                        <Button
+                            size={'sm'}
+                            onClick={() => router.visit('/dopamine-tracker')}
+                        >
+                            Ajouter
+                        </Button>
+                    </div>
+                    <StimulusList recent_stimuli={recent_stimuli} />
                 </CardContent>
             </Card>
         </>

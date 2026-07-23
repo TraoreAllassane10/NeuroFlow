@@ -42,4 +42,9 @@ class DopamineTrackerRepository
     {
         return StimulusLog::create($data);
     }
+
+    public function RecentStimuli()
+    {
+        return StimulusLog::whereToday('created_at')->latest()->limit(5)->get();
+    }
 }

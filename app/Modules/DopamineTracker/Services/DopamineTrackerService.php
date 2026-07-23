@@ -15,9 +15,7 @@ class DopamineTrackerService
 
     public function __construct(
         protected DopamineTrackerRepository $dopamineTrackerRepository
-    ) {
-       
-    }
+    ) {}
 
     public function getStimulusDuJour()
     {
@@ -43,6 +41,11 @@ class DopamineTrackerService
         return $this->dopamineTrackerRepository->dataChart($user);
     }
 
+    public function getRecentStimuli()
+    {
+        return $this->dopamineTrackerRepository->RecentStimuli();
+    }
+
     public function createStimulus(array $data)
     {
         $user = Auth::user();
@@ -54,7 +57,7 @@ class DopamineTrackerService
     public function deleteStimulus(StimulusLog $stimulusLog)
     {
         try {
-           return  $stimulusLog->delete();
+            return  $stimulusLog->delete();
         } catch (Exception $e) {
             Log::info('Erreur survenue lors de la suppresion d\'un stimulis', ["error" => $e->getMessage()]);
         }

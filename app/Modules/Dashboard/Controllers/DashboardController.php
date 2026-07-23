@@ -4,6 +4,7 @@ namespace App\Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Dashboard\Services\DashboardService;
+use App\Modules\DopamineTracker\Services\DopamineTrackerService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -11,7 +12,8 @@ class DashboardController extends Controller
 {
 
     public function __construct(
-        protected DashboardService $dashboardSerice
+        protected DashboardService $dashboardSerice,
+        protected DopamineTrackerService $dopamineTrackerService,
     ) {}
     public function index()
     {
@@ -19,6 +21,7 @@ class DashboardController extends Controller
         $neuro_scores = $user->neuro_scores()->whereToday('date')->first();
 
         $evolutionData = $this->dashboardSerice->getDataEvolution();
+        $recent_stimuli = $this->dopamineTrackerService->getRecentStimuli();
 
         return Inertia::render('dashboard', [
             "neuro_scores" => [
@@ -30,7 +33,8 @@ class DashboardController extends Controller
             ],
             "graphique" => [
                 "evolution" => $evolutionData
-            ]
+            ],
+            "recent_stimuli" => $recent_stimuli
         ]);
     }
 
