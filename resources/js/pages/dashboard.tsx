@@ -1,7 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 
 import { dashboard } from '@/routes';
-import {  protocolActions } from '@/modules/dashboard/constant/data';
+import { protocolActions } from '@/modules/dashboard/constant/data';
 import { Card, CardContent } from '@/components/ui/card';
 import MetricJauge from '@/modules/dashboard/components/metric-jauge';
 import { Button } from '@/components/ui/button';
@@ -16,16 +16,55 @@ import { Badge } from '@/components/ui/badge';
 import { ActivityHeatmap } from '@/modules/dashboard/components/ActivityHeatmap';
 import { EvolutionChart } from '@/modules/dashboard/components/EvolutionChart';
 import { StimulusList } from '@/modules/dashboard/components/StimulusList';
+import { useEffect, useState } from 'react';
+import useDashboard from '@/modules/dashboard/hooks/useDashboard';
+
+type Period = '7j' | '30j' | '90j';
+const graph_periods: Period[] = ['7j', '30j', '90j'];
 
 export default function Dashboard() {
-    const { auth, neuro_scores } = usePage().props;
+    const { auth, neuro_scores, graphique } = usePage().props;
+
+    const [period, setPeriod] = useState<'7j' | '30j' | '90j'>('7j');
+    const [evolutionData, setEvolutionData] = useState(graphique.evolution);
+
+    const { getEvolutionData } = useDashboard();
+
+    async function loadEvolutionData() {
+        const resultat = await getEvolutionData(period);
+        setEvolutionData(resultat);
+    }
+
+    useEffect(() => {
+        loadEvolutionData();
+    }, [period]);
 
     const metrics = [
-    { key: 'dopamine', label: 'Dopamine', value: neuro_scores.score_dopamine, color: '#E0A030' },
-    { key: 'cortisol', label: 'Cortisol', value: neuro_scores.score_cortisol, color: '#C23B3B' },
-    { key: 'serotonin', label: 'Serotonine', value: neuro_scores.score_serotonine, color: '#5FCFB0' },
-    { key: 'oxytocin', label: 'Oxytocin', value: neuro_scores.score_oxytocine, color: '#2F6FBA' },
-];
+        {
+            key: 'dopamine',
+            label: 'Dopamine',
+            value: neuro_scores.score_dopamine,
+            color: '#E0A030',
+        },
+        {
+            key: 'cortisol',
+            label: 'Cortisol',
+            value: neuro_scores.score_cortisol,
+            color: '#C23B3B',
+        },
+        {
+            key: 'serotonin',
+            label: 'Serotonine',
+            value: neuro_scores.score_serotonine,
+            color: '#5FCFB0',
+        },
+        {
+            key: 'oxytocin',
+            label: 'Oxytocin',
+            value: neuro_scores.score_oxytocine,
+            color: '#2F6FBA',
+        },
+    ];
     return (
         <>
             <Head title="Dashboard" />
@@ -43,7 +82,7 @@ export default function Dashboard() {
             </div>
 
             {/* 4 jauges neurochimiques */}
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
                 {metrics.map((m) => (
                     <Card key={m.key} className="border-border/60 bg-white">
                         <CardContent className="flex flex-col items-center gap-3 py-6">
@@ -57,11 +96,7 @@ export default function Dashboard() {
                 ))}
             </div>
 
-            {/* CTA check-in */}
-            <Button className="mx-auto my-6 flex items-center justify-center gap-2 bg-primary px-6 hover:bg-primary/90">
-                Faire mon check-in
-            </Button>
-
+            {/* Courbe d'evolution */}
             <div className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <Card className="border-border/60 lg:col-span-2">
                     <CardContent className="py-6">
@@ -70,22 +105,23 @@ export default function Dashboard() {
                                 Évolution 7 jours
                             </h2>
                             <div className="flex gap-1 rounded-md border border-border p-0.5 text-xs">
-                                {['7j', '30j', '90j'].map((period, i) => (
+                                {graph_periods.map((pd, i) => (
                                     <button
-                                        key={period}
+                                        key={pd}
+                                        onClick={() => setPeriod(pd)}
                                         className={`rounded px-2 py-1 ${
-                                            i === 0
+                                            pd === period
                                                 ? 'bg-muted font-medium text-foreground'
                                                 : 'text-muted-foreground'
                                         }`}
                                     >
-                                        {period}
+                                        {pd}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <EvolutionChart />
+                        <EvolutionChart data={evolutionData} />
 
                         <div className="mt-4 flex items-start gap-3 rounded-lg bg-indigo-50 p-4">
                             <TrendingUp className="mt-0.5 size-4 shrink-0 text-indigo-600" />

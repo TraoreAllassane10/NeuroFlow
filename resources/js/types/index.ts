@@ -10,6 +10,14 @@ export interface NeuroScore {
     score_global: number;
 }
 
+export interface Evolution {
+    day: string;
+    dopamine: number;
+    cortisol: number;
+    serotonine: number;
+    oxytocine: number;
+}
+
 export interface Question {
     question: string;
     reponses: { key: string; label: string }[];

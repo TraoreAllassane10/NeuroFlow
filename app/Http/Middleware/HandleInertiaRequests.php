@@ -39,10 +39,12 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $checkin = $this->daily_checkin_service->verifieCheckinExist();
-
         $user = Auth::user();
-        $neuro_scores = $user->neuro_scores()->whereToday('date')->first();
+
+        if ($user) {
+            $checkin = $this->daily_checkin_service->verifieCheckinExist();
+            $neuro_scores = $user->neuro_scores()->whereToday('date')->first();
+        }
 
         return [
             ...parent::share($request),
@@ -50,8 +52,8 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'checkin' => $checkin,
-            "score_global" => $neuro_scores->score_global,
+            'checkin' => $checkin ?? false,
+            "score_global" => $neuro_scores->score_global ?? 0,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

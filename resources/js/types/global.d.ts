@@ -1,5 +1,5 @@
 import type { Auth } from '@/types/auth';
-import { NeuroScore } from '.';
+import { Evolution, NeuroScore } from '.';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +15,9 @@ declare module '@inertiajs/core' {
             auth: Auth;
             neuro_scores: NeuroScore;
             score_global: number;
+            graphique: {
+                evolution: Evolution[];
+            }
             sidebarOpen: boolean;
             [key: string]: unknown;
         };

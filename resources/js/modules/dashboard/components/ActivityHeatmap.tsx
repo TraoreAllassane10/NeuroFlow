@@ -1,7 +1,8 @@
 // Intensité 0 à 4 par cellule. À remplacer par l'agrégat réel des stimulus
 // par créneau (ex: nombre d'événements loggés par heure/jour).
 const intensities = [
-    0, 1, 2, 1, 0, 2, 4, 1, 0, 2, 1, 3, 1, 2, 1, 0, 1, 2, 0, 3, 4,
+    0, 1, 2, 1, 0, 2, 4, 1, 0, 2, 1, 3, 1, 2, 1, 0, 1, 2, 0, 3, 4, 2, 6, 5, 6,
+    2, 5, 5,
 ];
 
 const levelClasses = [
@@ -9,6 +10,9 @@ const levelClasses = [
     'bg-indigo-100',
     'bg-indigo-200',
     'bg-indigo-400',
+    'bg-indigo-600',
+    'bg-indigo-700',
+    'bg-indigo-800',
     'bg-indigo-600',
 ];
 

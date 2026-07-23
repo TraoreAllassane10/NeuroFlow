@@ -131,7 +131,7 @@ export function CheckInDialog({
                 <DialogFooter className="border-t border-border pt-4">
                     <Button
                         onClick={handleSubmit}
-                        className="bg-indigo-700 hover:bg-indigo-800"
+                        className="bg-primary hover:bg-indigo-800"
                     >
                         Enregistrer le check-in
                     </Button>
