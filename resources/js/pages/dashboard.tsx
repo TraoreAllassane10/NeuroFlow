@@ -1,7 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react';
 
 import { dashboard } from '@/routes';
-import { protocolActions } from '@/modules/dashboard/constant/data';
 import { Card, CardContent } from '@/components/ui/card';
 import MetricJauge from '@/modules/dashboard/components/metric-jauge';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import {
     ArrowRight,
     CalendarCheck2,
     Flame,
+    Sparkles,
     Sunrise,
     TrendingUp,
 } from 'lucide-react';
@@ -23,7 +23,7 @@ type Period = '7j' | '30j' | '90j';
 const graph_periods: Period[] = ['7j', '30j', '90j'];
 
 export default function Dashboard() {
-    const { auth, neuro_scores, graphique, recent_stimuli } = usePage().props;
+    const { auth, neuro_scores, graphique, recommandations, recent_stimuli } = usePage().props;
 
     const [period, setPeriod] = useState<'7j' | '30j' | '90j'>('7j');
     const [evolutionData, setEvolutionData] = useState(graphique.evolution);
@@ -190,22 +190,22 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                {protocolActions.map((action) => (
-                    <Card key={action.title} className="border-border/60">
+                {recommandations?.map((recommandation) => (
+                    <Card key={recommandation.id} className="border-border/60">
                         <CardContent className="flex flex-col gap-4 py-6">
                             <div className="flex items-center justify-between">
-                                <action.icon className="size-5 text-primary" />
-                                {action.source && (
+                                <Sparkles className="size-5 text-primary" />
+                                {recommandation.source && (
                                     <Badge
                                         variant="secondary"
                                         className="bg-accent text-[10px] font-semibold text-muted-foreground"
                                     >
-                                        {action.source}
+                                        <span className='truncate'>{recommandation.source}</span>
                                     </Badge>
                                 )}
                             </div>
                             <p className="text-sm font-medium text-foreground">
-                                {action.title}
+                                {recommandation.titre}
                             </p>
                             <button className="text-left text-sm font-medium text-primary hover:underline">
                                 Marquer comme faite

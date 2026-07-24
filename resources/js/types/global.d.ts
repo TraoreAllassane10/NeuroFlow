@@ -1,6 +1,7 @@
 import type { Auth } from '@/types/auth';
 import { Evolution, NeuroScore } from '.';
 import { Stimulus } from '@/modules/dopamineTracker/types';
+import { Recommendation } from '@/modules/dashboard/types';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,6 +23,7 @@ declare module '@inertiajs/core' {
                 streak: number;
             }
             recent_stimuli: Stimulus[];
+            recommandations: Recommendation[];
             sidebarOpen: boolean;
             [key: string]: unknown;
         };
