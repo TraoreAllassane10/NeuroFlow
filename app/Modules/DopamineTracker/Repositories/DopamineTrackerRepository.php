@@ -24,19 +24,25 @@ class DopamineTrackerRepository
 
     public function dataChart(User $user)
     {
+        // return StimulusLog::where("user_id", $user->id)
+        //     ->whereDate('created_at', '>=', Carbon::now()->subDays(29))
+        //     ->get()
+        //     // Created_at est un timestamp complet avec heure/min donc on doit grouper seulement par date d'où ignorer l'heure/min
+        //     ->groupBy(fn($log) => $log->created_at->toDateString())
+        //     ->map(function ($group) {
+        //         return [
+        //             "day" => $group->first()->created_at->translatedFormat('D'),
+        //             "rapide" => $group->where("type", "rapide")->sum('intensite'),
+        //             "lente" => $group->where("type", "lente")->sum('intensite')
+        //         ];
+        //     })
+        //     ->values();
+
         return StimulusLog::where("user_id", $user->id)
             ->whereDate('created_at', '>=', Carbon::now()->subDays(29))
             ->get()
             // Created_at est un timestamp complet avec heure/min donc on doit grouper seulement par date d'où ignorer l'heure/min
-            ->groupBy(fn($log) => $log->created_at->toDateString())
-            ->map(function ($group) {
-                return [
-                    "day" => $group->first()->created_at->translatedFormat('D'),
-                    "rapide" => $group->where("type", "rapide")->sum('intensite'),
-                    "lente" => $group->where("type", "lente")->sum('intensite')
-                ];
-            })
-            ->values();
+            ->groupBy(fn($log) => $log->created_at->toDateString());
     }
 
     public function create(array $data)
