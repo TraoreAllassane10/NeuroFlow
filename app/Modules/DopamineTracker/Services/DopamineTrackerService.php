@@ -5,6 +5,7 @@ namespace App\Modules\DopamineTracker\Services;
 use App\Models\StimulusLog;
 use App\Modules\DopamineTracker\Repositories\DopamineTrackerRepository;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -39,6 +40,23 @@ class DopamineTrackerService
         $user = Auth::user();
 
         return $this->dopamineTrackerRepository->dataChart($user);
+    }
+
+    public function getNombreStimuliParJour()
+    {
+        $nombres = $this->dopamineTrackerRepository->nombreStimuliParJour();
+
+        $resultat = collect(
+            CarbonPeriod::create(Carbon::now()->subDays(27), now())
+        )
+            ->map(function (Carbon $date) use ($nombres) {
+                return $nombres[$date->toDateString()] ?? 0;
+            });
+
+        return [
+            "data" => $resultat,
+            "nombre_jour_activite" => $nombres->count()
+        ];
     }
 
     public function getRecentStimuli()

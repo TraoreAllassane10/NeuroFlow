@@ -22,6 +22,7 @@ class DashboardController extends Controller
 
         $evolutionData = $this->dashboardSerice->getDataEvolution();
         $recent_stimuli = $this->dopamineTrackerService->getRecentStimuli();
+        $heatmapData = $this->dopamineTrackerService->getNombreStimuliParJour();
 
         return Inertia::render('dashboard', [
             "neuro_scores" => [
@@ -32,7 +33,9 @@ class DashboardController extends Controller
                 "score_oxytocine" => $neuro_scores->score_oxytocine ?? 0
             ],
             "graphique" => [
-                "evolution" => $evolutionData
+                "evolution" => $evolutionData,
+                "heatmap" => $heatmapData['data'],
+                "streak" => $heatmapData['nombre_jour_activite']
             ],
             "recent_stimuli" => $recent_stimuli
         ]);

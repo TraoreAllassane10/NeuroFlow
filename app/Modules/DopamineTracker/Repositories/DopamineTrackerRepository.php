@@ -27,6 +27,7 @@ class DopamineTrackerRepository
         return StimulusLog::where("user_id", $user->id)
             ->whereDate('created_at', '>=', Carbon::now()->subDays(29))
             ->get()
+            // Created_at est un timestamp complet avec heure/min donc on doit grouper seulement par date d'où ignorer l'heure/min
             ->groupBy(fn($log) => $log->created_at->toDateString())
             ->map(function ($group) {
                 return [
@@ -46,5 +47,14 @@ class DopamineTrackerRepository
     public function RecentStimuli()
     {
         return StimulusLog::whereToday('created_at')->latest()->limit(5)->get();
+    }
+
+    public function nombreStimuliParJour()
+    {
+        return StimulusLog::whereDate('created_at', '>=', Carbon::now()->subDays(27))
+            ->get()
+            // Created_at est un timestamp complet avec heure/min donc on doit grouper seulement par date d'où ignorer l'heure/min
+            ->groupBy(fn($stimuli) => $stimuli->created_at->toDateString())
+            ->map(fn($group) => $group->count());
     }
 }

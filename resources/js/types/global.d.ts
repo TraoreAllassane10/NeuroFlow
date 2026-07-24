@@ -18,6 +18,8 @@ declare module '@inertiajs/core' {
             score_global: number;
             graphique: {
                 evolution: Evolution[];
+                heatmap: number[];
+                streak: number;
             }
             recent_stimuli: Stimulus[];
             sidebarOpen: boolean;

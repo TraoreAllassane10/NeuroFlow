@@ -37,7 +37,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         loadEvolutionData();
-    }, [period]);
+    }, [period, neuro_scores]);
 
     const metrics = [
         {
@@ -60,7 +60,7 @@ export default function Dashboard() {
         },
         {
             key: 'oxytocin',
-            label: 'Oxytocin',
+            label: 'Oxytocine',
             value: neuro_scores.score_oxytocine,
             color: '#2F6FBA',
         },
@@ -96,7 +96,7 @@ export default function Dashboard() {
                 ))}
             </div>
 
-            {/* Courbe d'evolution */}
+            {/* Courbe d'evolution et Heatmap */}
             <div className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <Card className="border-border/60 lg:col-span-2">
                     <CardContent className="py-6">
@@ -137,13 +137,15 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
+                {/* Heatmap */}
                 <div className="flex flex-col gap-4">
                     <Card className="border-border/60">
                         <CardContent className="py-6">
                             <h2 className="mb-4 text-base font-semibold">
                                 Heatmap activité
                             </h2>
-                            <ActivityHeatmap />
+
+                            <ActivityHeatmap data={graphique.heatmap} />
                         </CardContent>
                     </Card>
 
@@ -154,7 +156,7 @@ export default function Dashboard() {
                                     Streak
                                 </p>
                                 <p className="text-xl font-bold text-primary">
-                                    12 Jours
+                                    {graphique.streak} Jours
                                 </p>
                             </div>
                             <div className="flex size-10 items-center justify-center rounded-full bg-orange-100">
