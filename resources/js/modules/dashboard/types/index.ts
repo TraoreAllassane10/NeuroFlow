@@ -5,3 +5,11 @@ export interface MetricGaugeProps {
     size?: number;
     strokeWidth?: number;
 }
+
+export interface Recommendation {
+    id: number;
+    titre: string;
+    description: string;
+    source: string;
+    accompli: number;
+}
