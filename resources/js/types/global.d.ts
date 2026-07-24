@@ -1,4 +1,6 @@
 import type { Auth } from '@/types/auth';
+import { Evolution, NeuroScore } from '.';
+import { Stimulus } from '@/modules/dopamineTracker/types';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,6 +14,14 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            neuro_scores: NeuroScore;
+            score_global: number;
+            graphique: {
+                evolution: Evolution[];
+                heatmap: number[];
+                streak: number;
+            }
+            recent_stimuli: Stimulus[];
             sidebarOpen: boolean;
             [key: string]: unknown;
         };

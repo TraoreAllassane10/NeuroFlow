@@ -11,8 +11,7 @@ use Inertia\Inertia;
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])
-        ->middleware('onboarding')->name('dashboard');
+
 
     // Onboarding
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name("onboarding.index");
@@ -20,6 +19,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Daily Checkin
     Route::post('/daily-checkin', [DailyCheckinController::class, 'store'])->name('daily-chekin.store');
+
+    // Modules Dashbaord 
+    Route::middleware('onboarding')->controller(DashboardController::class)->group(function () {
+        Route::get('dashboard',  'index')->name('dashboard');
+        Route::get('/evolution/{period}', 'evolution')->name('evolution');
+    });
 
     // Modules Dopamine Tracker
     Route::middleware('onboarding')->controller(DopamineTrackerController::class)->group(function () {
@@ -32,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/dopamine-tracker/{stimuli}/delete', 'destroy')->name('dopamine-tracker.destroy');
     });
     Route::get('/dopamine-tracker/rapport', [RapportController::class, 'generer'])->name('dopamine-tracker.rapport');
+
 
     Route::get('/flow-engine', function () {
         return Inertia::render('flowEngine/Index');

@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\DailyCheckinService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -15,6 +17,8 @@ class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    public function __construct(protected DailyCheckinService $daily_checkin_service) {}
 
     /**
      * Determines the current asset version.
@@ -35,12 +39,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = Auth::user();
+
+        if ($user) {
+            $checkin = $this->daily_checkin_service->verifieCheckinExist();
+            $neuro_scores = $user->neuro_scores()->whereToday('date')->first();
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'checkin' => $checkin ?? false,
+            "score_global" => $neuro_scores->score_global ?? 0,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

@@ -1,12 +1,9 @@
 import { usePage } from '@inertiajs/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar';
-import type { SharedData } from '@/types';
 
-// Adapte `healthScore` à la vraie source de données (prop Inertia partagée,
-// ex: auth.user.health_score) une fois le calcul de score branché côté back.
-export function ScoreUser({ healthScore = 88 }: { healthScore?: number }) {
-    const { auth } = usePage<SharedData>().props;
+export function ScoreUser() {
+    const { auth, score_global } = usePage().props;
     const initials = auth.user.name
         .split(' ')
         .map((part) => part[0])
@@ -24,7 +21,7 @@ export function ScoreUser({ healthScore = 88 }: { healthScore?: number }) {
                     </AvatarFallback>
                 </Avatar>
                 <span className="text-sm text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
-                    Health Score: <span className="font-medium text-sidebar-foreground">{healthScore}</span>
+                    Health Score: <span className="font-medium text-sidebar-foreground">{score_global ?? 0}</span>
                 </span>
             </SidebarMenuItem>
         </SidebarMenu>
