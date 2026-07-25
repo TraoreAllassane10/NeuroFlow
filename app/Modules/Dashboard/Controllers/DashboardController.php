@@ -50,4 +50,16 @@ class DashboardController extends Controller
         $data = $this->dashboardSerice->getDataEvolution($period);
         return response()->json(['success' => true, 'data' => $data]);
     }
+
+    public function recommendation(string $id)
+    {
+        $data = $this->dashboardSerice->getRecommendation($id);
+        return response()->json(['success' => true, 'data' => $data]);
+    }
+
+    public function accompliRecommendation(string $id)
+    {
+        $data = $this->dashboardSerice->marquerRecommendationCommeFaite($id);
+        return response()->json(['success' => true, 'message' => 'Recommendation accomplie avec succès', 'data' => $data]);
+    }
 }

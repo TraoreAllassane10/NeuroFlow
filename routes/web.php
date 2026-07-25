@@ -12,7 +12,6 @@ Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-
     // Onboarding
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name("onboarding.index");
     Route::post('/onboarding', [OnboardingController::class, 'update'])->name('onboarding.update');
@@ -24,6 +23,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('onboarding')->controller(DashboardController::class)->group(function () {
         Route::get('dashboard',  'index')->name('dashboard');
         Route::get('/evolution/{period}', 'evolution')->name('evolution');
+        Route::get('/recommendation/{id}', 'recommendation')->name('recommendation');
+        Route::get('/recommendation/{id}/accompli', 'accompliRecommendation')->name('recommendation.accompli');
     });
 
     // Modules Dopamine Tracker

@@ -3,6 +3,7 @@
 namespace App\Modules\Dashboard\Services;
 
 use App\Models\NeuroScore;
+use App\Models\Recommendation;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,17 @@ class DashboardService
         });
 
         return $resultat;
+    }
 
+    public function getRecommendation(string $id)
+    {
+        return Recommendation::find($id);
+    }
+
+    public function marquerRecommendationCommeFaite(string $id)
+    {
+        $recommendation = Recommendation::find($id);
+        $recommendation->accompli = $recommendation->accompli === 0 ? 1 : 0;
+        return $recommendation->save();
     }
 }
