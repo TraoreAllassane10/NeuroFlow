@@ -221,11 +221,21 @@ export default function Dashboard() {
                                 {recommandation.titre}
                             </p>
                             <button
-                                onClick={() => handleDialogRecommandation(recommandation.id)}
+                                onClick={() =>
+                                    handleDialogRecommandation(
+                                        recommandation.id,
+                                    )
+                                }
                                 className="text-left text-sm font-medium text-primary hover:underline"
                             >
                                 En savoir plus
                             </button>
+
+                            {recommandation.accompli && (
+                                <p className="text-green-700">
+                                    Tâche accomplie
+                                </p>
+                            )}
                         </CardContent>
                     </Card>
                 ))}

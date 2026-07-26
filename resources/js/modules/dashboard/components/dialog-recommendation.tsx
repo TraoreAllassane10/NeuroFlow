@@ -78,7 +78,7 @@ const DialogRecommendation = ({
                         </div>
 
                         <DialogFooter className="pt-4">
-                            {!recommendation?.accompli && (
+                            {!recommendation?.accompli ? (
                                 <Button
                                     size={'sm'}
                                     onClick={() =>
@@ -93,6 +93,10 @@ const DialogRecommendation = ({
                                         'Marquer comme faire'
                                     )}
                                 </Button>
+                            ) : (
+                                <p className="text-green-700">
+                                    Tâche accomplie
+                                </p>
                             )}
                         </DialogFooter>
                     </>
