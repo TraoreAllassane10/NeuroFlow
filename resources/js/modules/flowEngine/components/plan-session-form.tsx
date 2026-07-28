@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,9 +13,11 @@ import { useState } from 'react';
 const durations = [25, 50, 90];
 
 const chargeTypes = [
-    { value: 'creatif-analytique-haut', label: 'Créatif / Analytique (Haut)' },
-    { value: 'administratif-leger', label: 'Administratif / Léger' },
-    { value: 'collaboratif', label: 'Collaboratif / Réunions' },
+    { value: 'créativité', label: 'créativité' },
+    { value: 'concentration profonde', label: 'concentration profonde' },
+    { value: 'lecture', label: 'lecture' },
+    { value: 'code', label: 'code' },
+    { value: 'autres', label: 'autres' },
 ];
 
 export function PlanSessionForm() {
@@ -88,7 +89,7 @@ export function PlanSessionForm() {
                     type="button"
                     variant="outline"
                     onClick={handleSubmit}
-                    className="border-indigo-600 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700"
+                    className="border-primary text-indigo-800 hover:bg-indigo-50 hover:text-indigo-700"
                 >
                     Ajouter au planning
                 </Button>

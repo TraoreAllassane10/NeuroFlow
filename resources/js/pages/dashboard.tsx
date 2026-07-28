@@ -231,7 +231,7 @@ export default function Dashboard() {
                                 En savoir plus
                             </button>
 
-                            {recommandation.accompli && (
+                            {recommandation.accompli === 1 && (
                                 <p className="text-green-700">
                                     Tâche accomplie
                                 </p>

@@ -7,11 +7,12 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { useEffect, useState } from 'react';
-import { Loader2Icon, LucideIcon, MoreHorizontal } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import useDashboard from '../hooks/useDashboard';
 import { Recommendation } from '../types';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import {router} from "@inertiajs/react"
 
 interface ShowStimulisProps {
     open: boolean;
@@ -44,6 +45,8 @@ const DialogRecommendation = ({
 
         if (response.success) {
             toast.success(response.message);
+            onOpenChange(false);
+            router.reload()
         }
     };
 
