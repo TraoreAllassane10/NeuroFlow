@@ -9,10 +9,12 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { useState } from 'react';
+import useFlowSession from '../hooks/useFlowSession';
+import { router } from '@inertiajs/react';
+import { toast } from 'sonner';
+import axios from 'axios';
 
-const durations = [25, 50, 90];
-
-const chargeTypes = [
+const typesSession = [
     { value: 'créativité', label: 'créativité' },
     { value: 'concentration profonde', label: 'concentration profonde' },
     { value: 'lecture', label: 'lecture' },
@@ -21,12 +23,39 @@ const chargeTypes = [
 ];
 
 export function PlanSessionForm() {
-    const [objective, setObjective] = useState('');
-    const [duration, setDuration] = useState(50);
-    const [chargeType, setChargeType] = useState(chargeTypes[0].value);
+    const [nom_tache, setNomTache] = useState('');
+    const [date, setDate] = useState<string>('');
+    const [heure_debut, setHeureDebut] = useState<string>('');
+    const [heure_fin, setHeureFin] = useState<string>('');
+    const [type_session, setTypeSession] = useState(typesSession[0].value);
 
-    function handleSubmit() {
-        // À brancher sur router.post(route('flow.plan'), { objective, duration, chargeType })
+    const { createSession, loading } = useFlowSession();
+
+    async function handleSubmit() {
+        try {
+            const response = await createSession({
+                nom_tache,
+                date,
+                heure_debut,
+                heure_fin,
+                type_session,
+            });
+
+            toast.success(response.message);
+            router.reload();
+
+            setNomTache('');
+            setDate('');
+            setHeureDebut('');
+            setHeureFin('');
+            setTypeSession('');
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data.message);
+            } else {
+                toast.error('Une erreur est survenue.');
+            }
+        }
     }
 
     return (
@@ -39,44 +68,56 @@ export function PlanSessionForm() {
                         Objectif / Tâche
                     </label>
                     <Input
-                        value={objective}
-                        onChange={(e) => setObjective(e.target.value)}
+                        value={nom_tache}
+                        onChange={(e) => setNomTache(e.target.value)}
                         placeholder="Ex: Rédaction specs..."
                     />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                        Durée (min)
+                        Date
                     </label>
-                    <div className="grid grid-cols-3 gap-2">
-                        {durations.map((d) => (
-                            <button
-                                key={d}
-                                type="button"
-                                onClick={() => setDuration(d)}
-                                className={`rounded-md border py-2 text-sm font-medium transition-colors ${
-                                    duration === d
-                                        ? 'border-indigo-600 text-indigo-700'
-                                        : 'border-border text-foreground hover:bg-muted'
-                                }`}
-                            >
-                                {d}
-                            </button>
-                        ))}
-                    </div>
+                    <Input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        placeholder="Ex: Rédaction specs..."
+                    />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                        Heure de début
+                    </label>
+                    <Input
+                        type="time"
+                        value={heure_debut}
+                        onChange={(e) => setHeureDebut(e.target.value)}
+                    />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                        Heure de fin
+                    </label>
+                    <Input
+                        type="time"
+                        value={heure_fin}
+                        onChange={(e) => setHeureFin(e.target.value)}
+                    />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                         Type de charge
                     </label>
-                    <Select value={chargeType} onValueChange={setChargeType}>
+                    <Select value={type_session} onValueChange={setTypeSession}>
                         <SelectTrigger className="w-full">
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            {chargeTypes.map((c) => (
+                            {typesSession.map((c) => (
                                 <SelectItem key={c.value} value={c.value}>
                                     {c.label}
                                 </SelectItem>
@@ -89,9 +130,10 @@ export function PlanSessionForm() {
                     type="button"
                     variant="outline"
                     onClick={handleSubmit}
-                    className="border-primary text-indigo-800 hover:bg-indigo-50 hover:text-indigo-700"
+                    disabled={loading}
+                    className="border-primary text-primary hover:bg-indigo-50 hover:text-indigo-700"
                 >
-                    Ajouter au planning
+                    {loading ? 'Plannification...' : 'Ajouter au planning'}
                 </Button>
             </CardContent>
         </Card>

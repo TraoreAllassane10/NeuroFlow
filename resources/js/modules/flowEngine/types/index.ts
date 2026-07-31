@@ -8,3 +8,11 @@ export interface FlowEvent {
     variant: EventVariant;
     splitAt?: number; // pour 'session' : heure de transition indigo -> teal
 }
+
+export interface CreateSessionData {
+    nom_tache: string;
+    type_session: string;
+    date: string;
+    heure_debut: string;
+    heure_fin: string;
+}
