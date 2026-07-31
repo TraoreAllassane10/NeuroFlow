@@ -16,3 +16,13 @@ export interface CreateSessionData {
     heure_debut: string;
     heure_fin: string;
 }
+
+export interface Session {
+    id?: number;
+    nom_tache: string;
+    type_session: string;
+    date: string;
+    jour: string;
+    heure_debut: string;
+    heure_fin: string;
+}

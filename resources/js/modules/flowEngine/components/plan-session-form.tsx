@@ -31,7 +31,19 @@ export function PlanSessionForm() {
 
     const { createSession, loading } = useFlowSession();
 
+    const canSubmit =
+        nom_tache && date && heure_debut && heure_fin && type_session;
+
     async function handleSubmit() {
+        const heureDebutSaisie = heure_debut.split(':')[0];
+        const heureFinSaisie = heure_fin.split(':')[0];
+
+        if (heureFinSaisie < heureDebutSaisie)
+        {
+            toast.error("L'heure de fin doit être supérieur à celle du debut");
+            return ;
+        }
+
         try {
             const response = await createSession({
                 nom_tache,
@@ -42,7 +54,7 @@ export function PlanSessionForm() {
             });
 
             toast.success(response.message);
-            router.reload();
+            router.visit('/flow-engine');
 
             setNomTache('');
             setDate('');
@@ -130,7 +142,7 @@ export function PlanSessionForm() {
                     type="button"
                     variant="outline"
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={loading || !canSubmit}
                     className="border-primary text-primary hover:bg-indigo-50 hover:text-indigo-700"
                 >
                     {loading ? 'Plannification...' : 'Ajouter au planning'}

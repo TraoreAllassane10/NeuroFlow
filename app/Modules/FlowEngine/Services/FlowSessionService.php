@@ -10,6 +10,24 @@ use Carbon\Carbon;
 class FlowSessionService
 {
 
+    public function getSessions(User $user)
+    {
+        return FlowSession::where('user_id', $user->id)
+            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->get()
+            ->map(function ($session) {
+                return [
+                    "id" => $session->id,
+                    "nom_tache" => $session->nom_tache,
+                    "type_session" => $session->type_session,
+                    "jour" => $session->date->translatedFormat('D'),
+                    "date" => $session->date,
+                    "heure_debut" => $session->heure_debut,
+                    "heure_fin" => $session->heure_fin,
+                ];
+            });
+    }
+
     public function createSession(User $user, array $data)
     {
         // Verifie si la plage est occupée

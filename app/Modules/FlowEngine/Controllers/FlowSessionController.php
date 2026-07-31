@@ -15,7 +15,11 @@ class FlowSessionController extends Controller
 
     public function index()
     {
-        return Inertia::render('flowEngine/Index');
+        $user = Auth::user();
+
+        $sessions = $this->flowSessionService->getSessions($user);
+
+        return Inertia::render('flowEngine/Index', ['sessions' => $sessions]);
     }
 
     public function store(CreateFlowSession $createFlowSession)

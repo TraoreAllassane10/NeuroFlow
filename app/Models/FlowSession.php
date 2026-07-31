@@ -21,8 +21,8 @@ class FlowSession extends Model
 
     protected $casts = [
         'date' => 'date',
-        'heure_debut' => 'datetime:H:i',
-        'heure_fin' => 'datetime:H:i'
+        // 'heure_debut' => 'time:H:i',
+        // 'heure_fin' => 'time:H:i'
     ];
 
     public function user()
