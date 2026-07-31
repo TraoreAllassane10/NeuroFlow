@@ -7,6 +7,7 @@ use App\Models\NeuroScore;
 use App\Models\Recommendation;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Log;
 use Prism\Prism\Exceptions\PrismRateLimitedException;
 use Prism\Prism\Facades\Prism;
@@ -21,47 +22,54 @@ class RecommandationService
             if ($recommendations->count() >= 1) {
                 return $recommendations;
             } else {
-                $scores = NeuroScore::whereToday('date')
-                    ->where('user_id', $user->id)
-                    ->first();
+
                 $dailyCheckin = DailyCheckin::where('user_id', $user->id)
                     ->whereToday('date')
                     ->first();
 
-                $context = [
-                    'score_dopamine' => $scores->score_dopamine,
-                    'score_cortisol' => $scores->score_cortisol,
-                    'score_serotonine' => $scores->score_serotonine,
-                    'score_oxytocine' => $scores->score_oxytocine,
-                    'score_global' => $scores->score_global,
+                if ($dailyCheckin) {
+                    $scores = NeuroScore::whereToday('date')
+                        ->where('user_id', $user->id)
+                        ->first();
 
-                    'humeur_utilisateur' => $dailyCheckin->humeur . '/10',
-                    'qualite_sommeil_utilisateur' => $dailyCheckin->qualite_sommeil . '/10',
-                    'niveau_energie_utilisateur' => $dailyCheckin->niveau_energie . '/10',
+                    $context = [
+                        'score_dopamine' => $scores->score_dopamine,
+                        'score_cortisol' => $scores->score_cortisol,
+                        'score_serotonine' => $scores->score_serotonine,
+                        'score_oxytocine' => $scores->score_oxytocine,
+                        'score_global' => $scores->score_global,
 
-                    'chronotype_utilisateur' => $user->chronotype,
-                    'objectif_utilisateur' => $user->objectif_principal
-                ];
+                        'humeur_utilisateur' => $dailyCheckin->humeur . '/10',
+                        'qualite_sommeil_utilisateur' => $dailyCheckin->qualite_sommeil . '/10',
+                        'niveau_energie_utilisateur' => $dailyCheckin->niveau_energie . '/10',
 
-                $prompt = $this->construirePrompt($context);
+                        'chronotype_utilisateur' => $user->chronotype,
+                        'objectif_utilisateur' => $user->objectif_principal
+                    ];
 
-                $response = Prism::text()
-                    ->using('gemini', 'gemini-flash-latest')
-                    ->withPrompt($prompt)
-                    ->asText();
+                    $prompt = $this->construirePrompt($context);
 
-                $contenu = $response->text;
+                    $response = Prism::text()
+                        ->using('gemini', 'gemini-flash-latest')
+                        ->withPrompt($prompt)
+                        ->asText();
 
-                $recommendationsGemini = json_decode($contenu, true);
+                    $contenu = $response->text;
 
-                Log::info($recommendationsGemini);
+                    $recommendationsGemini = json_decode($contenu, true);
 
-                foreach ($recommendationsGemini as $recommendation) {
-                    $this->createRecommendation($user, $recommendation);
+                    Log::info($recommendationsGemini);
+
+                    foreach ($recommendationsGemini as $recommendation) {
+                        $this->createRecommendation($user, $recommendation);
+                    }
+
+                    return $this->getRecommendationsDuJour($user);
                 }
-
-                return $this->getRecommendationsDuJour($user);
             }
+        } catch (ConnectionException $e) {
+            Log::warning('Veuillez vous connecter à l\'internet ! ');
+            return;
         } catch (PrismRateLimitedException $e) {
             Log::warning('Quota Gemini atteint');
             return;

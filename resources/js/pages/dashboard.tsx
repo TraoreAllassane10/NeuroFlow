@@ -18,15 +18,21 @@ import { EvolutionChart } from '@/modules/dashboard/components/EvolutionChart';
 import { StimulusList } from '@/modules/dashboard/components/StimulusList';
 import { useEffect, useState } from 'react';
 import useDashboard from '@/modules/dashboard/hooks/useDashboard';
+import DialogRecommendation from '@/modules/dashboard/components/dialog-recommendation';
 
 type Period = '7j' | '30j' | '90j';
 const graph_periods: Period[] = ['7j', '30j', '90j'];
 
 export default function Dashboard() {
-    const { auth, neuro_scores, graphique, recommandations, recent_stimuli } = usePage().props;
+    const { auth, neuro_scores, graphique, recommandations, recent_stimuli } =
+        usePage().props;
 
     const [period, setPeriod] = useState<'7j' | '30j' | '90j'>('7j');
     const [evolutionData, setEvolutionData] = useState(graphique.evolution);
+
+    const [openDialogRecommandation, setOpenDialogRecommandation] =
+        useState(false);
+    const [recommandationId, setRecommandationId] = useState<number>();
 
     const { getEvolutionData } = useDashboard();
 
@@ -65,6 +71,11 @@ export default function Dashboard() {
             color: '#2F6FBA',
         },
     ];
+
+    const handleDialogRecommandation = (id: number) => {
+        setRecommandationId(id);
+        setOpenDialogRecommandation(true);
+    };
     return (
         <>
             <Head title="Dashboard" />
@@ -167,7 +178,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* Fenêtre optimale + actions du protocole */}
+            {/* Fenêtre optimale + Recoommandation */}
             <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <Card className="border-border/60">
                     <CardContent className="py-6">
@@ -200,19 +211,43 @@ export default function Dashboard() {
                                         variant="secondary"
                                         className="bg-accent text-[10px] font-semibold text-muted-foreground"
                                     >
-                                        <span className='truncate'>{recommandation.source}</span>
+                                        <span className="truncate">
+                                            {recommandation.source}
+                                        </span>
                                     </Badge>
                                 )}
                             </div>
                             <p className="text-sm font-medium text-foreground">
                                 {recommandation.titre}
                             </p>
-                            <button className="text-left text-sm font-medium text-primary hover:underline">
-                                Marquer comme faite
+                            <button
+                                onClick={() =>
+                                    handleDialogRecommandation(
+                                        recommandation.id,
+                                    )
+                                }
+                                className="text-left text-sm font-medium text-primary hover:underline"
+                            >
+                                En savoir plus
                             </button>
+
+                            {recommandation.accompli === 1 && (
+                                <p className="text-green-700">
+                                    Tâche accomplie
+                                </p>
+                            )}
                         </CardContent>
                     </Card>
                 ))}
+
+                {/* Modal d'affichage d'une recommandation */}
+                {openDialogRecommandation && (
+                    <DialogRecommendation
+                        open={openDialogRecommandation}
+                        onOpenChange={setOpenDialogRecommandation}
+                        recommandationId={recommandationId!}
+                    />
+                )}
             </div>
 
             {/* Derniers stimulus */}

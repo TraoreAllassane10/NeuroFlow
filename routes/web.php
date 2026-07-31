@@ -5,13 +5,13 @@ use App\Http\Controllers\OnboardingController;
 use App\Modules\Dashboard\Controllers\DashboardController;
 use App\Modules\DopamineTracker\Controllers\DopamineTrackerController;
 use App\Modules\DopamineTracker\Controllers\RapportController;
+use App\Modules\FlowEngine\Controllers\FlowSessionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-
 
     // Onboarding
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name("onboarding.index");
@@ -24,6 +24,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('onboarding')->controller(DashboardController::class)->group(function () {
         Route::get('dashboard',  'index')->name('dashboard');
         Route::get('/evolution/{period}', 'evolution')->name('evolution');
+        Route::get('/recommendation/{id}', 'recommendation')->name('recommendation');
+        Route::get('/recommendation/{id}/accompli', 'accompliRecommendation')->name('recommendation.accompli');
     });
 
     // Modules Dopamine Tracker
@@ -38,9 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::get('/dopamine-tracker/rapport', [RapportController::class, 'generer'])->name('dopamine-tracker.rapport');
 
-
-    Route::get('/flow-engine', function () {
-        return Inertia::render('flowEngine/Index');
+    Route::middleware('onboarding')->controller(FlowSessionController::class)->group(function () {
+        Route::get('/flow-engine', 'index');
+        Route::post('/flow-engine/session/create', 'store')->name('session.create');
     });
 });
 

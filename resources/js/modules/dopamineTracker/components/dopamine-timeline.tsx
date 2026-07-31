@@ -50,7 +50,7 @@ export function DopamineTimeline({ stimulus }: { stimulus: Stimulus[] }) {
                                 key={stimulu.label}
                                 title={stimulu.label}
                                 onClick={() => handleShowDialog(stimulu.id)}
-                                className="absolute top-10 flex size-9 -translate-x-1/2 items-center justify-center rounded-lg bg-emerald-700 text-white shadow-sm"
+                                className="absolute top-10 flex size-9 -translate-x-1/2 items-center justify-center rounded-lg bg-emerald-700 text-white shadow-sm cursor-pointer"
                                 style={{ left }}
                             >
                                 <Icon className="size-4" />
@@ -64,7 +64,7 @@ export function DopamineTimeline({ stimulus }: { stimulus: Stimulus[] }) {
                             key={stimulu.label}
                             title={stimulu.label}
                             onClick={() => handleShowDialog(stimulu.id)}
-                            className="absolute top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-red-300 bg-red-50 text-red-500"
+                            className="absolute top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-red-300 bg-red-50 text-red-500 cursor-pointer"
                             style={{ left }}
                         >
                             <Icon className="size-4" />

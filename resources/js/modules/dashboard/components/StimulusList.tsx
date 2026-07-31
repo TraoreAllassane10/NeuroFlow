@@ -35,31 +35,35 @@ export function StimulusList({
 }) {
     return (
         <div className="divide-y divide-border">
-            {recent_stimuli.map((s) => {
-                const style = TypeStyle[s.type];
-                return (
-                    <div
-                        key={s.logged_at + s.label}
-                        className="flex items-center gap-4 py-3.5"
-                    >
-                        <span className="w-12 shrink-0 font-mono text-xs text-muted-foreground">
-                            {s.logged_at}
-                        </span>
-                        <span
-                            className={`shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold tracking-wide ${style.badge}`}
+            {recent_stimuli.length === 0 ? (
+                <div className='flex items-center justify-center'>Aucun stimuli ajouté aujourd'hui.</div>
+            ) : (
+                recent_stimuli.map((s) => {
+                    const style = TypeStyle[s.type];
+                    return (
+                        <div
+                            key={s.logged_at + s.label}
+                            className="flex items-center gap-4 py-3.5"
                         >
-                            {s.categorie}
-                        </span>
-                        <span className="flex-1 text-sm text-foreground">
-                            {s.label}
-                        </span>
-                        <IntensityBars
-                            level={s.intensite}
-                            colorClass={style.bar}
-                        />
-                    </div>
-                );
-            })}
+                            <span className="w-12 shrink-0 font-mono text-xs text-muted-foreground">
+                                {s.logged_at}
+                            </span>
+                            <span
+                                className={`shrink-0 rounded-md px-2 py-1 text-[10px] font-semibold tracking-wide ${style.badge}`}
+                            >
+                                {s.categorie}
+                            </span>
+                            <span className="flex-1 text-sm text-foreground">
+                                {s.label}
+                            </span>
+                            <IntensityBars
+                                level={s.intensite}
+                                colorClass={style.bar}
+                            />
+                        </div>
+                    );
+                })
+            )}
         </div>
     );
 }
